@@ -57,7 +57,7 @@ export function CarePlanPanel({
         </div>
       </div>
 
-      {trend ? <p className="rounded-card bg-mist px-5 py-4 text-[15px] text-slate">{trend.description}</p> : null}
+      {trend ? <p className="surface-callout px-5 py-4 text-[15px] text-[#555861]">{trend.description}</p> : null}
 
       <div className="grid gap-4 lg:grid-cols-2">
         <div className="card-surface">

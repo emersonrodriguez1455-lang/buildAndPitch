@@ -53,10 +53,33 @@ h2,
 }
 
 @layer components {
+  /* Quiet nested panels — always light surface + dark readable text */
+  .surface-quiet {
+    border-radius: 16px;
+    background-color: #f2f2f3;
+    color: #17191c;
+  }
+
+  .surface-callout {
+    border-radius: 24px;
+    background-color: #fafafb;
+    border: 1px solid #ececec;
+    color: #17191c;
+  }
+
+  .surface-callout .callout-title {
+    color: #17191c;
+    font-weight: 500;
+  }
+
+  .surface-callout .callout-body {
+    color: #555861;
+  }
+
   .card-surface {
     border-radius: var(--radius-cards);
-    background-color: var(--color-mist-gray);
-    color: var(--color-ink-black);
+    background-color: #f2f2f3;
+    color: #17191c;
     padding: 1.25rem;
   }
 

@@ -8,10 +8,13 @@ export function ConfidenceBar({ confidence }: { confidence: number }) {
         <span className="text-slate">Confianza del modelo</span>
         <span className="font-medium text-ink">{formatPercent(confidence)}</span>
       </div>
-      <div className="h-1.5 overflow-hidden rounded-pill bg-mist">
-        <div className="h-full rounded-pill bg-sienna transition-all duration-500" style={{ width: `${width}%` }} />
+      <div className="h-1.5 overflow-hidden rounded-pill" style={{ backgroundColor: "#f2f2f3" }}>
+        <div
+          className="h-full rounded-pill transition-all duration-500"
+          style={{ width: `${width}%`, backgroundColor: "#5d2a1a" }}
+        />
       </div>
-      <p className="mt-2 text-[14px] text-ash">
+      <p className="mt-2 text-[14px] text-[#777b86]">
         Puntuación softmax del clasificador. No representa una probabilidad clínica verificada.
       </p>
     </div>

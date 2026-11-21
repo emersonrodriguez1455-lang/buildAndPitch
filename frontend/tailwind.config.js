@@ -7,14 +7,19 @@ export default {
         // Steep tokens
         ink: "#17191c",
         paper: "#ffffff",
-        mist: "#f2f2f3",
+        mist: {
+          DEFAULT: "#f2f2f3",
+          soft: "#f7f7f8",
+        },
         fog: "#fafafb",
-        slate: "#777b86",
+        slate: {
+          DEFAULT: "#777b86",
+        },
         ash: "#979799",
         smoke: "#a3a6af",
         peach: "#fbe1d1",
         sienna: "#5d2a1a",
-        // Legacy aliases remapped to Steep (keeps existing classnames working)
+        // Legacy aliases remapped to Steep (never use as dark panel fills)
         forest: "#17191c",
         leaf: "#17191c",
         mint: "#f2f2f3",
@@ -22,6 +27,7 @@ export default {
         warn: "#5d2a1a",
         alert: "#5d2a1a",
         border: "#ececec",
+
       },
       fontFamily: {
         display: ['"Source Serif 4"', "Georgia", "ui-serif", "serif"],

@@ -30,41 +30,41 @@ export function ResultCard({ diagnosis }: { diagnosis: Diagnosis }) {
               {diagnosis.alternatives.map((alt) => (
                 <div
                   key={alt.class_name}
-                  className="flex items-center justify-between rounded-input bg-mist px-3 py-2 text-[15px]"
+                  className="surface-quiet flex items-center justify-between px-3 py-2.5 text-[15px]"
                 >
-                  <span className="text-ink">{alt.label}</span>
-                  <span className="text-slate">{formatPercent(alt.confidence)}</span>
+                  <span className="text-[#17191c]">{alt.label}</span>
+                  <span className="text-[#555861]">{formatPercent(alt.confidence)}</span>
                 </div>
               ))}
             </div>
           </div>
         ) : null}
 
-        <div className="rounded-card bg-mist px-4 py-3 text-[15px] text-ink">
-          <p className="text-[14px] text-ash">Aviso importante</p>
-          <p className="mt-1 text-slate">
+        <div className="surface-callout px-4 py-3 text-[15px]">
+          <p className="callout-title text-[14px]">Aviso importante</p>
+          <p className="callout-body mt-1">
             Este resultado es una estimación generada por inteligencia artificial. No constituye un diagnóstico
             agronómico definitivo. Se recomienda verificar los síntomas con un técnico agrícola.
           </p>
         </div>
 
-        <div className="rounded-card bg-mist px-4 py-3 text-[15px] text-ink">
-          <p className="font-medium">Orientación general</p>
-          <p className="mt-1 text-slate">{diagnosis.recommendation}</p>
+        <div className="surface-callout px-4 py-3 text-[15px]">
+          <p className="callout-title">Orientación general</p>
+          <p className="callout-body mt-1">{diagnosis.recommendation}</p>
         </div>
 
-        <div className="grid gap-2 text-[14px] text-slate sm:grid-cols-2">
+        <div className="grid gap-2 text-[14px] text-[#555861] sm:grid-cols-2">
           <p>
-            <span className="text-ink">Finca:</span> {diagnosis.farm_name}
+            <span className="text-[#17191c]">Finca:</span> {diagnosis.farm_name}
           </p>
           <p>
-            <span className="text-ink">Parcela:</span> {diagnosis.plot_name}
+            <span className="text-[#17191c]">Parcela:</span> {diagnosis.plot_name}
           </p>
           <p>
-            <span className="text-ink">Fecha:</span> {formatDateTime(diagnosis.created_at)}
+            <span className="text-[#17191c]">Fecha:</span> {formatDateTime(diagnosis.created_at)}
           </p>
           <p>
-            <span className="text-ink">ID:</span> #{diagnosis.id}
+            <span className="text-[#17191c]">ID:</span> #{diagnosis.id}
           </p>
         </div>
       </div>
