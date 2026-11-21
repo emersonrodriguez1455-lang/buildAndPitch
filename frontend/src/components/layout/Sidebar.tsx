@@ -27,11 +27,11 @@ export function Sidebar({ open, onClose, latestId }: SidebarProps) {
   return (
     <>
       <div
-        className={`fixed inset-0 z-40 bg-ink/20 transition lg:hidden ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}
+        className={`sidebar-backdrop fixed inset-0 z-40 transition lg:hidden ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}
         onClick={onClose}
       />
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-[min(100vw,18rem)] flex-col border-r border-border bg-paper transition-transform duration-300 lg:static lg:w-72 lg:translate-x-0 ${
+        className={`sidebar-panel fixed inset-y-0 left-0 z-50 flex w-[min(100vw,18rem)] flex-col border-r border-border shadow-popover transition-transform duration-300 lg:static lg:w-72 lg:translate-x-0 lg:shadow-none ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >

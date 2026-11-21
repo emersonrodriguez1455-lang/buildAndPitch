@@ -78,6 +78,15 @@ h2,
     color: var(--color-sienna-brown);
   }
 
+  .sidebar-panel {
+    background-color: #ffffff;
+    color: var(--color-ink-black);
+  }
+
+  .sidebar-backdrop {
+    background-color: rgba(23, 25, 28, 0.35);
+  }
+
   /* High-contrast nav: never dark-on-dark */
   .nav-link {
     display: flex;
