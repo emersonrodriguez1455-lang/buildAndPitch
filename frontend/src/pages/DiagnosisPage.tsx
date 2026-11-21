@@ -295,11 +295,7 @@ export function DiagnosisPage() {
                     active ? "bg-mist text-ink" : "bg-fog text-slate"
                   }`}
                 >
-                  <span
-                    className={`flex h-6 w-6 items-center justify-center rounded-full text-[12px] ${
-                      active ? "bg-ink text-paper" : "bg-paper text-slate"
-                    }`}
-                  >
+                  <span className={active ? "step-badge" : "flex h-6 w-6 items-center justify-center rounded-full bg-paper text-[12px] text-slate"}>
                     {index + 1}
                   </span>
                   <span className={current ? "animate-pulseSoft" : ""}>{step}</span>

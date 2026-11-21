@@ -24,53 +24,51 @@ export function LatestPlanCard({ diagnosis }: { diagnosis: Diagnosis | null }) {
   const steps = plan.primary_steps.slice(0, 3);
 
   return (
-    <section className="overflow-hidden rounded-card">
-      <div className="card-peach">
+    <section className="overflow-hidden rounded-card border border-border bg-paper">
+      <div className="card-peach !rounded-none">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0">
-            <p className="text-[14px] text-sienna/70">Plan activo</p>
-            <h3 className="mt-1 font-display text-[32px] leading-tight tracking-tight text-sienna sm:text-[40px]">
+            <p className="text-[14px] text-sienna/80">Plan activo</p>
+            <h3 className="mt-1 font-display text-[28px] leading-tight tracking-tight text-sienna sm:text-[40px]">
               {diagnosis.predicted_class_label}
             </h3>
-            <p className="mt-2 text-[15px] text-sienna/80">
+            <p className="mt-2 text-[14px] text-sienna/80 sm:text-[15px]">
               {diagnosis.farm_name} · {diagnosis.plot_name} · {formatDateTime(diagnosis.created_at)} ·{" "}
               {formatPercent(diagnosis.confidence)}
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
             {diagnosis.trend ? (
-              <span className="rounded-pill bg-paper/60 px-3 py-1 text-[13px] text-sienna">
+              <span className="rounded-pill bg-paper px-3 py-1 text-[13px] text-sienna">
                 {diagnosis.trend.label}
               </span>
             ) : null}
-            <span className="rounded-pill bg-paper/60 px-3 py-1 text-[13px] text-sienna">
+            <span className="rounded-pill bg-paper px-3 py-1 text-[13px] text-sienna">
               Revisar en {plan.next_check_days} días
             </span>
           </div>
         </div>
-        <p className="mt-5 text-[17px] text-sienna">{plan.headline}</p>
+        <p className="mt-5 text-[16px] text-sienna sm:text-[17px]">{plan.headline}</p>
       </div>
 
-      <div className="grid bg-mist lg:grid-cols-[1.2fr_0.8fr]">
-        <div className="p-5">
+      <div className="grid bg-fog lg:grid-cols-[1.2fr_0.8fr]">
+        <div className="p-4 sm:p-5">
           <p className="section-label mb-3">Qué hacer ahora</p>
           <ol className="space-y-3">
             {steps.map((step, index) => (
-              <li key={step} className="flex gap-3 text-[16px] text-ink">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-ink text-[12px] text-paper">
-                  {index + 1}
-                </span>
-                {step}
+              <li key={step} className="flex gap-3 text-[15px] text-ink sm:text-[16px]">
+                <span className="step-badge">{index + 1}</span>
+                <span className="leading-snug">{step}</span>
               </li>
             ))}
           </ol>
           {plan.primary_steps.length > 3 ? (
-            <Link to={`/diagnostico/${diagnosis.id}`} className="btn-ghost mt-2">
+            <Link to={`/diagnostico/${diagnosis.id}`} className="btn-ghost mt-2 !py-3">
               Ver todos los pasos →
             </Link>
           ) : null}
         </div>
-        <div className="flex flex-col justify-center gap-2 border-t border-border p-5 lg:border-l lg:border-t-0">
+        <div className="flex flex-col justify-center gap-2 border-t border-border bg-paper p-4 sm:p-5 lg:border-l lg:border-t-0">
           <Link to={`/diagnostico/${diagnosis.id}`} className="btn-secondary w-full justify-center">
             Ver recomendación
           </Link>

@@ -65,9 +65,7 @@ export function CarePlanPanel({
           <ol className="space-y-3">
             {carePlan.primary_steps.map((step, index) => (
               <li key={step} className="flex gap-3 text-[16px] text-ink">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-ink text-[12px] text-paper">
-                  {index + 1}
-                </span>
+                <span className="step-badge">{index + 1}</span>
                 <span>{step}</span>
               </li>
             ))}

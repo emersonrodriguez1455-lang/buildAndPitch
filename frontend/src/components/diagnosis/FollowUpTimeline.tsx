@@ -36,7 +36,7 @@ export function FollowUpTimeline({ timeline }: { timeline: DiagnosisTimelineResp
                   Escaneo {index + 1}: {item.predicted_class_label}
                 </p>
                 {item.is_current ? (
-                  <span className="rounded-pill bg-ink px-2 py-0.5 text-[11px] text-paper">Actual</span>
+                  <span className="rounded-pill bg-ink px-2 py-0.5 text-[11px] text-white">Actual</span>
                 ) : null}
               </div>
               <p className="mt-1 text-[14px] text-slate">

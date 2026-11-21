@@ -36,7 +36,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             key={toast.id}
             className={`animate-fadeUp rounded-elevated px-4 py-3 text-[15px] shadow-popover ${
               toast.type === "success"
-                ? "bg-ink text-paper"
+                ? "bg-ink text-white"
                 : toast.type === "error"
                   ? "bg-peach text-sienna"
                   : "bg-mist text-ink"
