@@ -101,6 +101,47 @@ h2,
     color: var(--color-sienna-brown);
   }
 
+  .status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    border-radius: 9999px;
+    border: 1px solid #ececec;
+    background-color: #fafafb;
+    padding: 0 1rem;
+    font-size: 14px;
+    line-height: 1;
+    color: #17191c;
+  }
+
+  .status-chip-dot {
+    width: 0.375rem;
+    height: 0.375rem;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    background-color: #17191c;
+  }
+
+  .status-chip-dot.is-muted {
+    background-color: #979799;
+  }
+
+  .avatar-chip {
+    display: inline-flex;
+    height: 2.5rem;
+    width: 2.5rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 1px solid #ececec;
+    background-color: #f2f2f3;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1;
+    color: #17191c;
+  }
+
   .sidebar-panel {
     background-color: #ffffff;
     color: var(--color-ink-black);

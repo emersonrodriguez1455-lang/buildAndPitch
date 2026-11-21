@@ -48,11 +48,11 @@ export function Topbar({ title, modelReady, modelLoading, onMenu, latest }: Topb
               <span className="truncate">Plan: {latest.predicted_class_label}</span>
             </Link>
           ) : null}
-          <div className="hidden items-center gap-2 rounded-pill bg-mist px-4 py-2 text-[14px] text-slate sm:flex">
-            <span className={`h-1.5 w-1.5 rounded-full ${modelReady ? "bg-ink" : "bg-ash"}`} />
-            {statusLabel}
+          <div className="status-chip hidden sm:inline-flex" aria-live="polite">
+            <span className={`status-chip-dot ${modelReady ? "" : "is-muted"}`} aria-hidden />
+            <span>{statusLabel}</span>
           </div>
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-mist text-[13px] font-medium text-ink">
+          <div className="avatar-chip" aria-hidden>
             ER
           </div>
         </div>
