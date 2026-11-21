@@ -12,6 +12,7 @@ import {
   listPlots,
 } from "../services/api";
 import type { Diagnosis, Farm, Plot } from "../types";
+import { rememberLastDiagnosisId } from "../utils/lastPlan";
 
 const STEPS = [
   "Imagen cargada",
@@ -132,7 +133,11 @@ export function DiagnosisPage() {
       const diagnosis = await createDiagnosis(formData);
       setStepIndex(5);
       setResult(diagnosis);
-      notify("Diagnóstico completado y guardado.", "success");
+      rememberLastDiagnosisId(diagnosis.id);
+      notify("Diagnóstico completado. Tu plan quedó guardado para consultarlo cuando quieras.", "success");
+      window.setTimeout(() => {
+        document.getElementById("plan-activo")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 150);
     } catch (error) {
       setStepIndex(file ? 0 : -1);
       notify(extractErrorMessage(error, "No se pudo completar el análisis."), "error");
@@ -311,9 +316,29 @@ export function DiagnosisPage() {
 
       {result ? (
         <section className="mt-6 space-y-5">
+          <div className="sticky top-[4.5rem] z-20 rounded-2xl border border-leaf/30 bg-mint/95 p-4 shadow-soft backdrop-blur">
+            <p className="text-xs font-semibold uppercase tracking-wide text-forest">Plan guardado · no se pierde</p>
+            <p className="mt-1 text-sm font-semibold text-ink">
+              {result.care_plan?.headline || result.predicted_class_label}
+            </p>
+            <p className="mt-1 line-clamp-2 text-xs text-mist">
+              {result.care_plan?.primary_steps?.[0] || result.recommendation}
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <a href="#plan-activo" className="btn-secondary !py-1.5 text-xs">
+                Ver pasos completos
+              </a>
+              <Link to={`/diagnostico/${result.id}`} className="btn-primary !py-1.5 text-xs">
+                Abrir caso guardado
+              </Link>
+            </div>
+          </div>
+
           <h3 className="text-lg font-semibold text-ink">Resultado del diagnóstico</h3>
           <ResultCard diagnosis={result} />
-          <CarePlanPanel carePlan={result.care_plan} trend={result.trend} />
+          <div id="plan-activo">
+            <CarePlanPanel carePlan={result.care_plan} trend={result.trend} />
+          </div>
           <div className="flex flex-wrap gap-2">
             <Link to={`/diagnostico/${result.id}`} className="btn-secondary">
               Ver detalle del caso

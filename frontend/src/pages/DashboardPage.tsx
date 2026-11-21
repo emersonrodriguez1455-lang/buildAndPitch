@@ -14,10 +14,12 @@ import { EmptyState } from "../components/common/EmptyState";
 import { LoadingBlock } from "../components/common/LoadingBlock";
 import { PageHeader } from "../components/common/PageHeader";
 import { StatCard } from "../components/common/StatCard";
+import { LatestPlanCard } from "../components/diagnosis/LatestPlanCard";
 import { useToast } from "../contexts/ToastContext";
 import {
   extractErrorMessage,
   getDiseaseStats,
+  getLatestDiagnosis,
   getSummary,
   getTimeline,
   listDiagnoses,
@@ -32,21 +34,24 @@ export function DashboardPage() {
   const [diseases, setDiseases] = useState<DiseaseStatItem[]>([]);
   const [timeline, setTimeline] = useState<TimelinePoint[]>([]);
   const [recent, setRecent] = useState<Diagnosis[]>([]);
+  const [latest, setLatest] = useState<Diagnosis | null>(null);
 
   useEffect(() => {
     const load = async () => {
       try {
         setLoading(true);
-        const [summaryData, diseaseData, timelineData, history] = await Promise.all([
+        const [summaryData, diseaseData, timelineData, history, latestData] = await Promise.all([
           getSummary(),
           getDiseaseStats(),
           getTimeline("week"),
           listDiagnoses({ page: 1, page_size: 5 }),
+          getLatestDiagnosis(),
         ]);
         setSummary(summaryData);
         setDiseases(diseaseData);
         setTimeline(timelineData);
         setRecent(history.items);
+        setLatest(latestData);
       } catch (error) {
         notify(extractErrorMessage(error, "No se pudo cargar el dashboard."), "error");
       } finally {
@@ -70,6 +75,10 @@ export function DashboardPage() {
           </Link>
         }
       />
+
+      <div className="mb-6">
+        <LatestPlanCard diagnosis={latest} />
+      </div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Fincas registradas" value={summary?.total_farms ?? 0} icon={MapPinned} />

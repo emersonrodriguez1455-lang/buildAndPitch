@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import {
   BarChart3,
+  ClipboardList,
   History,
   LayoutDashboard,
   Leaf,
@@ -20,9 +21,10 @@ const links = [
 interface SidebarProps {
   open: boolean;
   onClose: () => void;
+  latestId: number | null;
 }
 
-export function Sidebar({ open, onClose }: SidebarProps) {
+export function Sidebar({ open, onClose, latestId }: SidebarProps) {
   return (
     <>
       <div
@@ -65,6 +67,20 @@ export function Sidebar({ open, onClose }: SidebarProps) {
               {label}
             </NavLink>
           ))}
+          {latestId ? (
+            <NavLink
+              to={`/diagnostico/${latestId}`}
+              onClick={onClose}
+              className={({ isActive }) =>
+                `flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
+                  isActive ? "bg-leaf text-white" : "bg-white/10 text-white hover:bg-white/15"
+                }`
+              }
+            >
+              <ClipboardList className="h-4 w-4" />
+              Mi último plan
+            </NavLink>
+          ) : null}
         </nav>
 
         <div className="m-4 rounded-2xl bg-white/10 p-4 text-xs text-mint">

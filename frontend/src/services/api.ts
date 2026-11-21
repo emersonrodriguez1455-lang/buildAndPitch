@@ -106,6 +106,11 @@ export async function getDiagnosis(id: number): Promise<Diagnosis> {
   return data;
 }
 
+export async function getLatestDiagnosis(): Promise<Diagnosis | null> {
+  const { data } = await api.get<Diagnosis | null>("/api/diagnosis/latest");
+  return data;
+}
+
 export async function getDiagnosisTimeline(id: number): Promise<DiagnosisTimelineResponse> {
   const { data } = await api.get<DiagnosisTimelineResponse>(`/api/diagnosis/${id}/timeline`);
   return data;

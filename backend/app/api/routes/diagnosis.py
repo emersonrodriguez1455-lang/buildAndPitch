@@ -303,6 +303,19 @@ def serve_diagnosis_image(filename: str) -> FileResponse:
     return FileResponse(path)
 
 
+@router.get("/diagnosis/latest", response_model=DiagnosisDetail | None)
+def latest_diagnosis(db: Session = Depends(get_db)) -> DiagnosisDetail | None:
+    item = (
+        db.query(Diagnosis)
+        .options(joinedload(Diagnosis.farm), joinedload(Diagnosis.plot))
+        .order_by(Diagnosis.created_at.desc())
+        .first()
+    )
+    if not item:
+        return None
+    return _serialize_detail(item, db)
+
+
 @router.get("/diagnosis/{diagnosis_id}/timeline", response_model=DiagnosisTimelineResponse)
 def diagnosis_timeline(diagnosis_id: int, db: Session = Depends(get_db)) -> DiagnosisTimelineResponse:
     current = db.get(Diagnosis, diagnosis_id)

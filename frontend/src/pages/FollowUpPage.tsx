@@ -12,6 +12,7 @@ import {
   getDiagnosis,
 } from "../services/api";
 import type { Diagnosis } from "../types";
+import { rememberLastDiagnosisId } from "../utils/lastPlan";
 
 const ACCEPTED = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const MAX_MB = 10;
@@ -83,7 +84,8 @@ export function FollowUpPage() {
       if (observations.trim()) formData.append("observations", observations.trim());
       const diagnosis = await createFollowUp(parent.id, formData);
       setResult(diagnosis);
-      notify("Seguimiento registrado. Revisemos cómo evoluciona el caso.", "success");
+      rememberLastDiagnosisId(diagnosis.id);
+      notify("Seguimiento registrado. El nuevo plan quedó a la mano en el panel superior.", "success");
     } catch (error) {
       notify(extractErrorMessage(error, "No se pudo registrar el seguimiento."), "error");
     } finally {
