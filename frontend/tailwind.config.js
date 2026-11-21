@@ -53,15 +53,28 @@ export default {
         page: "1200px",
       },
       boxShadow: {
-        soft: "0 0 0 1px rgba(4,23,43,0.05), 0 8px 10px -6px rgba(0,0,0,0.08)",
+        soft: "0 0 0 1px rgba(4,23,43,0.05), 0 4px 16px rgba(0,0,0,0.06)",
         artifact:
           "0 0 0 1px rgba(4,23,43,0.05), 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)",
-        popover: "0 0 0 1px rgba(4,23,43,0.05), 0 4px 24px rgba(0,0,0,0.08)",
+        lift: "0 0 0 1px rgba(4,23,43,0.05), 0 24px 40px -12px rgba(0,0,0,0.14)",
+        popover: "0 0 0 1px rgba(4,23,43,0.05), 0 8px 28px rgba(0,0,0,0.08)",
+      },
+      transitionTimingFunction: {
+        out: "cubic-bezier(0.22, 1, 0.36, 1)",
+      },
+      transitionDuration: {
+        fast: "120ms",
+        ui: "180ms",
+        enter: "320ms",
       },
       keyframes: {
         fadeUp: {
-          "0%": { opacity: "0", transform: "translateY(8px)" },
+          "0%": { opacity: "0", transform: "translateY(10px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
         },
         pulseSoft: {
           "0%, 100%": { opacity: "1" },
@@ -69,7 +82,8 @@ export default {
         },
       },
       animation: {
-        fadeUp: "fadeUp 0.4s ease-out",
+        fadeUp: "fadeUp 0.32s cubic-bezier(0.22, 1, 0.36, 1)",
+        fadeIn: "fadeIn 0.42s cubic-bezier(0.22, 1, 0.36, 1)",
         pulseSoft: "pulseSoft 1.6s ease-in-out infinite",
       },
     },

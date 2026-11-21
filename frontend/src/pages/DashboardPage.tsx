@@ -155,7 +155,7 @@ export function DashboardPage() {
               <Link
                 key={item.id}
                 to={`/diagnostico/${item.id}`}
-                className="card-elevated flex gap-4 transition hover:opacity-95"
+                className="card-elevated is-interactive flex gap-4"
               >
                 <img
                   src={apiImageUrl(item.image_url, getApiBase())}

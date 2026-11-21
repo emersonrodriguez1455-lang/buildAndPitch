@@ -12,7 +12,7 @@ export function StatCard({ label, value, hint, icon: Icon, tone = "default" }: S
   const peach = tone === "warn";
 
   return (
-    <div className={`${peach ? "card-peach" : "card-elevated"} animate-fadeUp`}>
+    <div className={`${peach ? "card-peach" : "card-elevated"} animate-enter`}>
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className={`text-[14px] ${peach ? "text-sienna/70" : "text-ash"}`}>{label}</p>

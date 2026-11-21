@@ -99,7 +99,7 @@ export function AppLayout() {
             onDismiss={() => setBannerDismissed(true)}
           />
         ) : null}
-        <main className="flex-1 px-4 py-8 sm:px-6 lg:px-10">
+        <main key={location.pathname} className="page-enter flex-1 px-4 py-8 sm:px-6 lg:px-10">
           <Outlet context={{ modelReady, modelLoading, latestDiagnosis: latest, refreshLatest }} />
         </main>
       </div>
