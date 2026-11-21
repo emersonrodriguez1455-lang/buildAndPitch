@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ClipboardList, Menu, UserRound } from "lucide-react";
+import { ClipboardList, Menu } from "lucide-react";
 import type { Diagnosis } from "../../types";
 
 interface TopbarProps {
@@ -12,36 +12,28 @@ interface TopbarProps {
 
 export function Topbar({ title, modelReady, modelLoading, onMenu, latest }: TopbarProps) {
   const statusLabel = modelLoading
-    ? "Cargando modelo..."
+    ? "Cargando modelo…"
     : modelReady
-      ? "IA disponible"
+      ? "IA lista"
       : modelReady === false
         ? "IA no disponible"
-        : "Verificando IA";
-
-  const statusColor = modelLoading
-    ? "bg-warn"
-    : modelReady
-      ? "bg-leaf"
-      : modelReady === false
-        ? "bg-alert"
-        : "bg-mist";
+        : "Verificando…";
 
   return (
-    <header className="sticky top-0 z-30 border-b border-mint/70 bg-canvas/90 backdrop-blur">
-      <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-6">
+    <header className="sticky top-0 z-30 border-b border-border/70 bg-paper/90 backdrop-blur">
+      <div className="flex items-center justify-between gap-3 px-4 py-4 sm:px-6">
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={onMenu}
-            className="rounded-xl border border-mint bg-white p-2 text-forest lg:hidden"
+            className="rounded-pill border border-border p-2 text-ink lg:hidden"
             aria-label="Abrir menú"
           >
             <Menu className="h-5 w-5" />
           </button>
           <div>
-            <p className="text-xs uppercase tracking-wide text-mist">Sección</p>
-            <h2 className="text-base font-semibold text-ink sm:text-lg">{title}</h2>
+            <p className="section-label">Sección</p>
+            <h2 className="font-display text-[22px] tracking-tight text-ink sm:text-[26px]">{title}</h2>
           </div>
         </div>
 
@@ -49,25 +41,19 @@ export function Topbar({ title, modelReady, modelLoading, onMenu, latest }: Topb
           {latest ? (
             <Link
               to={`/diagnostico/${latest.id}`}
-              className="hidden max-w-[220px] items-center gap-2 rounded-full border border-leaf/30 bg-mint px-3 py-1.5 text-xs font-semibold text-forest hover:bg-leaf hover:text-white md:flex"
+              className="hidden max-w-[240px] items-center gap-2 rounded-pill bg-peach px-4 py-2 text-[14px] text-sienna md:flex"
               title={latest.care_plan?.headline || latest.predicted_class_label}
             >
               <ClipboardList className="h-3.5 w-3.5 shrink-0" />
               <span className="truncate">Plan: {latest.predicted_class_label}</span>
             </Link>
           ) : null}
-          <div className="hidden items-center gap-2 rounded-full border border-mint bg-white px-3 py-1.5 text-xs font-medium text-ink sm:flex">
-            <span className={`h-2 w-2 rounded-full ${statusColor}`} />
+          <div className="hidden items-center gap-2 rounded-pill bg-mist px-4 py-2 text-[14px] text-slate sm:flex">
+            <span className={`h-1.5 w-1.5 rounded-full ${modelReady ? "bg-ink" : "bg-ash"}`} />
             {statusLabel}
           </div>
-          <div className="flex items-center gap-2 rounded-full border border-mint bg-white px-2.5 py-1.5">
-            <div className="rounded-full bg-mint p-1.5 text-leaf">
-              <UserRound className="h-4 w-4" />
-            </div>
-            <div className="hidden pr-1 sm:block">
-              <p className="text-xs font-semibold text-ink">Usuario demo</p>
-              <p className="text-[10px] text-mist">MVP local</p>
-            </div>
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-mist text-[13px] font-medium text-ink">
+            ER
           </div>
         </div>
       </div>

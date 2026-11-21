@@ -1,54 +1,17 @@
-import {
-  CheckCircle2,
-  ClipboardList,
-  HeartPulse,
-  ShieldCheck,
-  Stethoscope,
-  TrendingDown,
-  TrendingUp,
-  Minus,
-} from "lucide-react";
+import { TrendingDown, TrendingUp, Minus } from "lucide-react";
 import type { CarePlan, TrendInfo } from "../../types";
 
 function TrendBadge({ trend }: { trend?: TrendInfo | null }) {
   if (!trend) return null;
   const Icon =
     trend.direction === "up" ? TrendingUp : trend.direction === "down" ? TrendingDown : Minus;
-  const tone =
-    trend.direction === "up"
-      ? "bg-mint text-leaf"
-      : trend.direction === "down"
-        ? "bg-alert/10 text-alert"
-        : "bg-canvas text-mist";
 
   return (
-    <div className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ${tone}`}>
+    <div className="inline-flex items-center gap-2 rounded-pill bg-mist px-3 py-1 text-[13px] text-slate">
       <Icon className="h-3.5 w-3.5" />
       {trend.label}
     </div>
   );
-}
-
-function modeMeta(mode: string) {
-  if (mode === "prevencion") {
-    return {
-      icon: ShieldCheck,
-      tone: "bg-mint text-leaf",
-      label: "Prevención",
-    };
-  }
-  if (mode === "verificar") {
-    return {
-      icon: Stethoscope,
-      tone: "bg-warn/15 text-warn",
-      label: "Verificar síntomas",
-    };
-  }
-  return {
-    icon: HeartPulse,
-    tone: "bg-alert/10 text-alert",
-    label: "Manejo y seguimiento",
-  };
 }
 
 export function CarePlanPanel({
@@ -59,40 +22,50 @@ export function CarePlanPanel({
   trend?: TrendInfo | null;
 }) {
   if (!carePlan) return null;
-  const meta = modeMeta(carePlan.mode);
-  const Icon = meta.icon;
+
+  const isPrevention = carePlan.mode === "prevencion";
 
   return (
-    <section className="card-surface space-y-5 p-5 animate-fadeUp">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="flex items-start gap-3">
-          <div className={`rounded-xl p-2.5 ${meta.tone}`}>
-            <Icon className="h-5 w-5" />
-          </div>
+    <section className="space-y-5 animate-fadeUp">
+      <div className={isPrevention ? "card-peach" : "card-elevated"}>
+        <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-mist">{meta.label}</p>
-            <h3 className="mt-1 text-lg font-bold text-ink">{carePlan.headline}</h3>
-            <p className="mt-1 max-w-2xl text-sm text-mist">{carePlan.summary}</p>
+            <p className={`text-[14px] ${isPrevention ? "text-sienna/70" : "text-ash"}`}>
+              {carePlan.mode === "prevencion"
+                ? "Prevención"
+                : carePlan.mode === "verificar"
+                  ? "Verificar síntomas"
+                  : "Manejo y seguimiento"}
+            </p>
+            <h3
+              className={`mt-2 font-display text-[28px] leading-tight tracking-tight sm:text-[32px] ${
+                isPrevention ? "text-sienna" : "text-ink"
+              }`}
+            >
+              {carePlan.headline}
+            </h3>
+            <p className={`mt-3 max-w-2xl text-[16px] ${isPrevention ? "text-sienna/80" : "text-slate"}`}>
+              {carePlan.summary}
+            </p>
           </div>
-        </div>
-        <div className="flex flex-col items-end gap-2">
-          <TrendBadge trend={trend} />
-          <p className="text-xs text-mist">Próxima revisión sugerida: {carePlan.next_check_days} días</p>
+          <div className="flex flex-col items-end gap-2">
+            <TrendBadge trend={trend} />
+            <p className={`text-[14px] ${isPrevention ? "text-sienna/70" : "text-ash"}`}>
+              Próxima revisión: {carePlan.next_check_days} días
+            </p>
+          </div>
         </div>
       </div>
 
-      {trend ? <p className="rounded-xl bg-canvas px-3 py-2 text-sm text-ink">{trend.description}</p> : null}
+      {trend ? <p className="rounded-card bg-mist px-5 py-4 text-[15px] text-slate">{trend.description}</p> : null}
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <div className="rounded-2xl border border-mint bg-canvas/60 p-4">
-          <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-forest">
-            <ClipboardList className="h-4 w-4" />
-            Pasos a seguir ahora
-          </div>
-          <ol className="space-y-2">
+        <div className="card-surface">
+          <p className="section-label mb-4">Pasos a seguir ahora</p>
+          <ol className="space-y-3">
             {carePlan.primary_steps.map((step, index) => (
-              <li key={step} className="flex gap-3 text-sm text-ink">
-                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-leaf text-[11px] font-bold text-white">
+              <li key={step} className="flex gap-3 text-[16px] text-ink">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-ink text-[12px] text-paper">
                   {index + 1}
                 </span>
                 <span>{step}</span>
@@ -101,15 +74,14 @@ export function CarePlanPanel({
           </ol>
         </div>
 
-        <div className="rounded-2xl border border-mint bg-white p-4">
-          <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-ink">
-            <CheckCircle2 className="h-4 w-4 text-leaf" />
-            {carePlan.mode === "prevencion" ? "Checklist de verificación" : "También te ayuda prevenir"}
-          </div>
-          <ul className="space-y-2">
+        <div className="card-elevated">
+          <p className="section-label mb-4">
+            {carePlan.mode === "prevencion" ? "Checklist de verificación" : "También ayuda prevenir"}
+          </p>
+          <ul className="space-y-3">
             {carePlan.secondary_steps.map((step) => (
-              <li key={step} className="flex gap-2 text-sm text-mist">
-                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-leaf" />
+              <li key={step} className="flex gap-2 text-[16px] text-slate">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-ink" />
                 {step}
               </li>
             ))}
@@ -117,10 +89,10 @@ export function CarePlanPanel({
         </div>
       </div>
 
-      <div className="rounded-xl border border-warn/30 bg-warn/10 p-3 text-sm text-ink">
-        <p className="font-semibold text-warn">Apoyo técnico</p>
-        <p className="mt-1">{carePlan.technician_advice}</p>
-        <p className="mt-2 text-xs text-mist">{carePlan.disclaimer}</p>
+      <div className="rounded-card border border-border bg-fog px-5 py-4 text-[15px] text-slate">
+        <p className="font-medium text-ink">Apoyo técnico</p>
+        <p className="mt-2">{carePlan.technician_advice}</p>
+        <p className="mt-2 text-[14px] text-ash">{carePlan.disclaimer}</p>
       </div>
     </section>
   );

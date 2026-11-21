@@ -92,9 +92,9 @@ export function StatisticsPage() {
         <StatCard label="% saludables" value={`${summary?.healthy_percentage ?? 0}%`} icon={HeartPulse} tone="ok" />
       </div>
 
-      <div className="mt-6 grid gap-5 xl:grid-cols-2">
-        <section className="card-surface p-5">
-          <h3 className="mb-4 font-semibold text-ink">Por clasificación</h3>
+      <div className="mt-10 grid gap-5 xl:grid-cols-2">
+        <section className="card-elevated">
+          <h3 className="mb-4 font-display text-[26px] tracking-tight text-ink">Por clasificación</h3>
           {diseases.length === 0 ? (
             <EmptyState icon={BarChart3} title="Sin datos" description="Aún no hay diagnósticos para graficar." />
           ) : (
@@ -102,8 +102,8 @@ export function StatisticsPage() {
           )}
         </section>
 
-        <section className="card-surface p-5">
-          <h3 className="mb-4 font-semibold text-ink">Evolución temporal</h3>
+        <section className="card-elevated">
+          <h3 className="mb-4 font-display text-[26px] tracking-tight text-ink">Evolución temporal</h3>
           {timeline.length === 0 ? (
             <EmptyState icon={BarChart3} title="Sin datos" description="La línea de tiempo aparecerá con nuevas inspecciones." />
           ) : (
@@ -111,38 +111,50 @@ export function StatisticsPage() {
           )}
         </section>
 
-        <section className="card-surface p-5">
-          <h3 className="mb-4 font-semibold text-ink">Saludables vs posibles problemas</h3>
+        <section className="card-elevated">
+          <h3 className="mb-4 font-display text-[26px] tracking-tight text-ink">Saludables vs posibles problemas</h3>
           {(summary?.total_diagnoses ?? 0) === 0 ? (
             <EmptyState icon={BarChart3} title="Sin datos" description="Realiza inspecciones para ver la distribución." />
           ) : (
             <div className="h-72">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={healthyIssue}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#DDF3E5" />
-                  <XAxis dataKey="name" tick={{ fontSize: 12, fill: "#738078" }} />
-                  <YAxis allowDecimals={false} tick={{ fontSize: 12, fill: "#738078" }} />
-                  <Tooltip contentStyle={{ borderRadius: 12, borderColor: "#DDF3E5" }} />
-                  <Bar dataKey="value" fill="#163B2B" radius={[8, 8, 0, 0]} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ececec" vertical={false} />
+                  <XAxis dataKey="name" tick={{ fontSize: 12, fill: "#777b86" }} axisLine={false} tickLine={false} />
+                  <YAxis allowDecimals={false} tick={{ fontSize: 12, fill: "#777b86" }} axisLine={false} tickLine={false} />
+                  <Tooltip
+                    contentStyle={{
+                      borderRadius: 16,
+                      border: "1px solid #ececec",
+                      boxShadow: "0 8px 24px rgba(0,0,0,0.06)",
+                    }}
+                  />
+                  <Bar dataKey="value" fill="#17191c" radius={[8, 8, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           )}
         </section>
 
-        <section className="card-surface p-5">
-          <h3 className="mb-4 font-semibold text-ink">Actividad por finca</h3>
+        <section className="card-elevated">
+          <h3 className="mb-4 font-display text-[26px] tracking-tight text-ink">Actividad por finca</h3>
           {farms.length === 0 ? (
             <EmptyState icon={MapPinned} title="Sin fincas" description="Registra fincas y diagnósticos para comparar actividad." />
           ) : (
             <div className="h-72">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={farms}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#DDF3E5" />
-                  <XAxis dataKey="farm_name" tick={{ fontSize: 11, fill: "#738078" }} />
-                  <YAxis allowDecimals={false} tick={{ fontSize: 12, fill: "#738078" }} />
-                  <Tooltip contentStyle={{ borderRadius: 12, borderColor: "#DDF3E5" }} />
-                  <Bar dataKey="diagnosis_count" name="Inspecciones" fill="#238B57" radius={[8, 8, 0, 0]} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ececec" vertical={false} />
+                  <XAxis dataKey="farm_name" tick={{ fontSize: 11, fill: "#777b86" }} axisLine={false} tickLine={false} />
+                  <YAxis allowDecimals={false} tick={{ fontSize: 12, fill: "#777b86" }} axisLine={false} tickLine={false} />
+                  <Tooltip
+                    contentStyle={{
+                      borderRadius: 16,
+                      border: "1px solid #ececec",
+                      boxShadow: "0 8px 24px rgba(0,0,0,0.06)",
+                    }}
+                  />
+                  <Bar dataKey="diagnosis_count" name="Inspecciones" fill="#5d2a1a" radius={[8, 8, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

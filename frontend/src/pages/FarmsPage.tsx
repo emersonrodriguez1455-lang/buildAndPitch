@@ -213,8 +213,8 @@ export function FarmsPage() {
       />
 
       <div className="grid gap-5 xl:grid-cols-2">
-        <section className="card-surface p-5">
-          <h3 className="mb-4 text-base font-semibold text-ink">Fincas</h3>
+        <section className="card-surface">
+          <h3 className="mb-5 font-display text-[26px] tracking-tight text-ink">Fincas</h3>
           {farms.length === 0 ? (
             <EmptyState
               icon={MapPinned}
@@ -229,24 +229,24 @@ export function FarmsPage() {
           ) : (
             <div className="space-y-3">
               {farms.map((farm) => (
-                <article key={farm.id} className="rounded-2xl border border-mint bg-canvas/50 p-4">
+                <article key={farm.id} className="rounded-elevated bg-paper p-5">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <h4 className="font-semibold text-ink">{farm.name}</h4>
-                      <p className="text-sm text-mist">
+                      <h4 className="text-[18px] text-ink">{farm.name}</h4>
+                      <p className="mt-1 text-[15px] text-slate">
                         {farm.municipality}, {farm.department}
                       </p>
-                      <p className="mt-1 text-xs text-mist">
+                      <p className="mt-1 text-[14px] text-ash">
                         {farm.location} · {farm.area_hectares} ha
                       </p>
                     </div>
                     <div className="flex gap-1">
-                      <button type="button" className="rounded-lg p-2 text-mist hover:bg-white hover:text-leaf" onClick={() => openEditFarm(farm)}>
+                      <button type="button" className="rounded-pill p-2 text-slate hover:bg-mist hover:text-ink" onClick={() => openEditFarm(farm)}>
                         <Pencil className="h-4 w-4" />
                       </button>
                       <button
                         type="button"
-                        className="rounded-lg p-2 text-mist hover:bg-white hover:text-alert"
+                        className="rounded-pill p-2 text-slate hover:bg-mist hover:text-sienna"
                         onClick={() => setDeleteTarget({ type: "farm", id: farm.id, name: farm.name })}
                       >
                         <Trash2 className="h-4 w-4" />
@@ -259,8 +259,8 @@ export function FarmsPage() {
           )}
         </section>
 
-        <section className="card-surface p-5">
-          <h3 className="mb-4 text-base font-semibold text-ink">Parcelas</h3>
+        <section className="card-surface">
+          <h3 className="mb-5 font-display text-[26px] tracking-tight text-ink">Parcelas</h3>
           {plots.length === 0 ? (
             <EmptyState
               icon={MapPinned}
@@ -270,23 +270,23 @@ export function FarmsPage() {
           ) : (
             <div className="space-y-3">
               {plots.map((plot) => (
-                <article key={plot.id} className="rounded-2xl border border-mint bg-canvas/50 p-4">
+                <article key={plot.id} className="rounded-elevated bg-paper p-5">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <h4 className="font-semibold text-ink">{plot.name}</h4>
-                      <p className="text-sm text-mist">{plot.farm_name}</p>
-                      <p className="mt-1 text-xs text-mist">
+                      <h4 className="text-[18px] text-ink">{plot.name}</h4>
+                      <p className="mt-1 text-[15px] text-slate">{plot.farm_name}</p>
+                      <p className="mt-1 text-[14px] text-ash">
                         {plot.coffee_variety || "Variedad no indicada"}
                         {plot.altitude ? ` · ${plot.altitude} m s. n. m.` : ""}
                       </p>
                     </div>
                     <div className="flex gap-1">
-                      <button type="button" className="rounded-lg p-2 text-mist hover:bg-white hover:text-leaf" onClick={() => openEditPlot(plot)}>
+                      <button type="button" className="rounded-pill p-2 text-slate hover:bg-mist hover:text-ink" onClick={() => openEditPlot(plot)}>
                         <Pencil className="h-4 w-4" />
                       </button>
                       <button
                         type="button"
-                        className="rounded-lg p-2 text-mist hover:bg-white hover:text-alert"
+                        className="rounded-pill p-2 text-slate hover:bg-mist hover:text-sienna"
                         onClick={() => setDeleteTarget({ type: "plot", id: plot.id, name: plot.name })}
                       >
                         <Trash2 className="h-4 w-4" />
@@ -319,7 +319,7 @@ export function FarmsPage() {
           <div>
             <label className="label-field">Nombre</label>
             <input className="input-field" {...farmForm.register("name")} />
-            <p className="mt-1 text-xs text-alert">{farmForm.formState.errors.name?.message}</p>
+            <p className="mt-1 text-xs text-sienna">{farmForm.formState.errors.name?.message}</p>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
@@ -406,13 +406,13 @@ export function FarmsPage() {
             <button type="button" className="btn-secondary" onClick={() => setDeleteTarget(null)}>
               Cancelar
             </button>
-            <button type="button" className="btn-primary bg-alert hover:bg-alert/90" onClick={confirmDelete}>
+            <button type="button" className="btn-primary" onClick={confirmDelete}>
               Eliminar
             </button>
           </>
         }
       >
-        <p className="text-sm text-mist">
+        <p className="text-sm text-slate">
           ¿Eliminar {deleteTarget?.type === "farm" ? "la finca" : "la parcela"}{" "}
           <strong>{deleteTarget?.name}</strong>? Esta acción también puede eliminar inspecciones asociadas.
         </p>

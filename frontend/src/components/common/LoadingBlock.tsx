@@ -1,12 +1,8 @@
-export function LoadingBlock({ label = "Cargando..." }: { label?: string }) {
+export function LoadingBlock({ label = "Cargando…" }: { label?: string }) {
   return (
-    <div className="flex items-center justify-center gap-3 rounded-2xl border border-mint bg-white px-4 py-10 text-sm text-mist">
-      <span className="h-4 w-4 animate-pulseSoft rounded-full bg-leaf" />
+    <div className="flex items-center justify-center gap-3 rounded-card bg-mist px-4 py-12 text-[15px] text-slate">
+      <span className="h-2 w-2 animate-pulseSoft rounded-full bg-ink" />
       {label}
     </div>
   );
-}
-
-export function SkeletonCard() {
-  return <div className="h-28 animate-pulse rounded-2xl bg-mint/60" />;
 }

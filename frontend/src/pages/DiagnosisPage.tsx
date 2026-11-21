@@ -155,14 +155,14 @@ export function DiagnosisPage() {
       />
 
       {outlet?.modelReady === false ? (
-        <div className="mb-5 rounded-2xl border border-alert/30 bg-alert/10 px-4 py-3 text-sm text-ink">
+        <div className="card-peach mb-5 !py-4 text-[15px]">
           El motor de inteligencia artificial no está disponible en este momento.
           {outlet.modelLoading ? " El modelo aún se está cargando." : " Verifique la conexión o reinicie el backend."}
         </div>
       ) : null}
 
       <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
-        <section className="card-surface p-5">
+        <section className="card-surface">
           <div
             onDragOver={(e) => {
               e.preventDefault();
@@ -175,13 +175,13 @@ export function DiagnosisPage() {
               const dropped = e.dataTransfer.files?.[0];
               if (dropped) assignFile(dropped);
             }}
-            className={`rounded-2xl border-2 border-dashed px-4 py-10 text-center transition ${
-              dragging ? "border-leaf bg-mint/40" : "border-mint bg-canvas/60"
+            className={`rounded-card border-2 border-dashed px-4 py-10 text-center transition ${
+              dragging ? "border-ink bg-paper" : "border-border bg-paper/70"
             }`}
           >
             {preview ? (
               <div className="mx-auto max-w-md">
-                <img src={preview} alt="Vista previa" className="mb-4 max-h-72 w-full rounded-xl object-cover" />
+                <img src={preview} alt="Vista previa" className="mb-4 max-h-72 w-full rounded-image object-cover" />
                 <div className="flex flex-wrap justify-center gap-2">
                   <label className="btn-secondary cursor-pointer">
                     <Upload className="h-4 w-4" />
@@ -202,11 +202,11 @@ export function DiagnosisPage() {
               </div>
             ) : (
               <div className="mx-auto max-w-sm">
-                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-mint text-leaf">
+                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-paper text-ink">
                   <ImagePlus className="h-6 w-6" />
                 </div>
-                <p className="font-semibold text-ink">Arrastra una fotografía aquí</p>
-                <p className="mt-1 text-sm text-mist">JPG, JPEG, PNG o WEBP · máximo {MAX_MB} MB</p>
+                <p className="text-[18px] text-ink">Arrastra una fotografía aquí</p>
+                <p className="mt-1 text-[15px] text-slate">JPG, JPEG, PNG o WEBP · máximo {MAX_MB} MB</p>
                 <label className="btn-primary mt-4 cursor-pointer">
                   Seleccionar imagen
                   <input
@@ -282,8 +282,8 @@ export function DiagnosisPage() {
           </button>
         </section>
 
-        <section className="card-surface p-5">
-          <h3 className="text-base font-semibold text-ink">Estado del proceso</h3>
+        <section className="card-elevated">
+          <h3 className="font-display text-[26px] tracking-tight text-ink">Estado del proceso</h3>
           <ol className="mt-4 space-y-3">
             {STEPS.map((step, index) => {
               const active = index <= stepIndex;
@@ -291,23 +291,23 @@ export function DiagnosisPage() {
               return (
                 <li
                   key={step}
-                  className={`flex items-center gap-3 rounded-xl px-3 py-2 text-sm ${
-                    active ? "bg-mint/60 text-forest" : "bg-canvas text-mist"
+                  className={`flex items-center gap-3 rounded-input px-3 py-2 text-[15px] ${
+                    active ? "bg-mist text-ink" : "bg-fog text-slate"
                   }`}
                 >
                   <span
-                    className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ${
-                      active ? "bg-leaf text-white" : "bg-white text-mist"
+                    className={`flex h-6 w-6 items-center justify-center rounded-full text-[12px] ${
+                      active ? "bg-ink text-paper" : "bg-paper text-slate"
                     }`}
                   >
                     {index + 1}
                   </span>
-                  <span className={current ? "animate-pulseSoft font-semibold" : ""}>{step}</span>
+                  <span className={current ? "animate-pulseSoft" : ""}>{step}</span>
                 </li>
               );
             })}
           </ol>
-          <p className="mt-5 text-xs leading-relaxed text-mist">
+          <p className="mt-5 text-[14px] leading-relaxed text-slate">
             El modelo clasifica la imagen completa; no localiza lesiones con cajas. La primera ejecución puede
             tardar mientras se descargan los pesos.
           </p>
@@ -315,26 +315,26 @@ export function DiagnosisPage() {
       </div>
 
       {result ? (
-        <section className="mt-6 space-y-5">
-          <div className="sticky top-[4.5rem] z-20 rounded-2xl border border-leaf/30 bg-mint/95 p-4 shadow-soft backdrop-blur">
-            <p className="text-xs font-semibold uppercase tracking-wide text-forest">Plan guardado · no se pierde</p>
-            <p className="mt-1 text-sm font-semibold text-ink">
+        <section className="mt-10 space-y-5">
+          <div className="sticky top-[4.5rem] z-20 card-elevated !py-4 backdrop-blur">
+            <p className="section-label">Plan guardado · no se pierde</p>
+            <p className="mt-1 text-[18px] text-ink">
               {result.care_plan?.headline || result.predicted_class_label}
             </p>
-            <p className="mt-1 line-clamp-2 text-xs text-mist">
+            <p className="mt-1 line-clamp-2 text-[14px] text-slate">
               {result.care_plan?.primary_steps?.[0] || result.recommendation}
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
-              <a href="#plan-activo" className="btn-secondary !py-1.5 text-xs">
+              <a href="#plan-activo" className="btn-secondary !h-9 text-[14px]">
                 Ver pasos completos
               </a>
-              <Link to={`/diagnostico/${result.id}`} className="btn-primary !py-1.5 text-xs">
+              <Link to={`/diagnostico/${result.id}`} className="btn-primary !h-9 text-[14px]">
                 Abrir caso guardado
               </Link>
             </div>
           </div>
 
-          <h3 className="text-lg font-semibold text-ink">Resultado del diagnóstico</h3>
+          <h3 className="font-display text-[32px] tracking-tight text-ink">Resultado del diagnóstico</h3>
           <ResultCard diagnosis={result} />
           <div id="plan-activo">
             <CarePlanPanel carePlan={result.care_plan} trend={result.trend} />

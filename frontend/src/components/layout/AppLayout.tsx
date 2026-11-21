@@ -10,7 +10,7 @@ import { Topbar } from "./Topbar";
 const titles: Record<string, string> = {
   "/dashboard": "Dashboard",
   "/diagnostico": "Nuevo diagnóstico",
-  "/historial": "Historial de diagnósticos",
+  "/historial": "Historial",
   "/fincas": "Fincas y parcelas",
   "/estadisticas": "Estadísticas",
 };
@@ -24,7 +24,7 @@ export function AppLayout() {
   const [bannerDismissed, setBannerDismissed] = useState(false);
 
   const title = useMemo(() => {
-    if (location.pathname.includes("/seguimiento")) return "Seguimiento del caso";
+    if (location.pathname.includes("/seguimiento")) return "Seguimiento";
     if (location.pathname.startsWith("/diagnostico/")) return "Detalle del caso";
     return titles[location.pathname] || "AgroAlerta AI";
   }, [location.pathname]);
@@ -35,7 +35,7 @@ export function AppLayout() {
       setLatest(data);
       if (data) rememberLastDiagnosisId(data.id);
     } catch {
-      // keep previous banner content if backend briefly fails
+      // keep previous
     }
   }, []);
 
@@ -82,7 +82,7 @@ export function AppLayout() {
         location.pathname === `/diagnostico/${latest.id}/seguimiento`));
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-paper">
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} latestId={latest?.id ?? null} />
       <div className="flex min-w-0 flex-1 flex-col">
         <Topbar
@@ -99,7 +99,7 @@ export function AppLayout() {
             onDismiss={() => setBannerDismissed(true)}
           />
         ) : null}
-        <main className="flex-1 px-4 py-5 sm:px-6 lg:px-8">
+        <main className="flex-1 px-4 py-8 sm:px-6 lg:px-10">
           <Outlet context={{ modelReady, modelLoading, latestDiagnosis: latest, refreshLatest }} />
         </main>
       </div>

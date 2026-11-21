@@ -34,12 +34,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`animate-fadeUp rounded-xl px-4 py-3 text-sm font-medium text-white shadow-soft ${
+            className={`animate-fadeUp rounded-elevated px-4 py-3 text-[15px] shadow-popover ${
               toast.type === "success"
-                ? "bg-leaf"
+                ? "bg-ink text-paper"
                 : toast.type === "error"
-                  ? "bg-alert"
-                  : "bg-forest"
+                  ? "bg-peach text-sienna"
+                  : "bg-mist text-ink"
             }`}
           >
             {toast.message}

@@ -9,19 +9,26 @@ interface StatCardProps {
 }
 
 export function StatCard({ label, value, hint, icon: Icon, tone = "default" }: StatCardProps) {
-  const toneClass =
-    tone === "warn" ? "bg-warn/15 text-warn" : tone === "ok" ? "bg-mint text-leaf" : "bg-mint text-forest";
+  const peach = tone === "warn";
 
   return (
-    <div className="card-surface p-4 animate-fadeUp">
+    <div className={`${peach ? "card-peach" : "card-elevated"} animate-fadeUp`}>
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wide text-mist">{label}</p>
-          <p className="mt-2 text-2xl font-bold text-ink">{value}</p>
-          {hint ? <p className="mt-1 text-xs text-mist">{hint}</p> : null}
+          <p className={`text-[14px] ${peach ? "text-sienna/70" : "text-ash"}`}>{label}</p>
+          <p
+            className={`mt-2 text-[20px] font-medium tracking-tight ${
+              peach ? "text-sienna" : "text-ink"
+            }`}
+          >
+            {value}
+          </p>
+          {hint ? (
+            <p className={`mt-1 text-[14px] ${peach ? "text-sienna/70" : "text-slate"}`}>{hint}</p>
+          ) : null}
         </div>
-        <div className={`rounded-xl p-2.5 ${toneClass}`}>
-          <Icon className="h-5 w-5" />
+        <div className={`rounded-full p-2.5 ${peach ? "bg-paper/50 text-sienna" : "bg-mist text-ink"}`}>
+          <Icon className="h-4 w-4" />
         </div>
       </div>
     </div>

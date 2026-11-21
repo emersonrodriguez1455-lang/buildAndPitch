@@ -88,7 +88,7 @@ export function DiagnosisDetailPage() {
               <ArrowLeft className="h-4 w-4" />
               Historial
             </Link>
-            <button type="button" className="btn-secondary text-alert" onClick={() => setConfirmOpen(true)}>
+            <button type="button" className="btn-secondary text-sienna" onClick={() => setConfirmOpen(true)}>
               <Trash2 className="h-4 w-4" />
               Eliminar
             </button>
@@ -96,7 +96,7 @@ export function DiagnosisDetailPage() {
         }
       />
 
-      <div className="mb-5 rounded-2xl border border-leaf/20 bg-mint/40 px-4 py-3 text-sm text-ink">
+      <div className="card-surface mb-8 !py-4 text-[15px] text-ink">
         {diagnosis.is_healthy ? (
           <>
             <strong>Estado:</strong> aparentemente sano. Usa el plan de prevención y agenda una revisión en{" "}
@@ -109,7 +109,7 @@ export function DiagnosisDetailPage() {
           </>
         )}
         {(diagnosis.follow_up_count ?? 0) > 0 ? (
-          <span className="ml-1 text-mist">· {diagnosis.follow_up_count} seguimiento(s) registrados</span>
+          <span className="ml-1 text-slate">· {diagnosis.follow_up_count} seguimiento(s) registrados</span>
         ) : null}
       </div>
 
@@ -127,8 +127,8 @@ export function DiagnosisDetailPage() {
 
       {diagnosis.observations ? (
         <section className="card-surface mt-5 p-5">
-          <h3 className="text-sm font-semibold text-ink">Observaciones registradas</h3>
-          <p className="mt-2 text-sm text-mist">{diagnosis.observations}</p>
+          <h3 className="font-display text-[22px] tracking-tight text-ink">Observaciones registradas</h3>
+          <p className="mt-2 text-[15px] text-slate">{diagnosis.observations}</p>
         </section>
       ) : null}
 
@@ -148,13 +148,13 @@ export function DiagnosisDetailPage() {
             <button type="button" className="btn-secondary" onClick={() => setConfirmOpen(false)}>
               Cancelar
             </button>
-            <button type="button" className="btn-primary bg-alert hover:bg-alert/90" onClick={onDelete} disabled={deleting}>
+            <button type="button" className="btn-primary" onClick={onDelete} disabled={deleting}>
               {deleting ? "Eliminando..." : "Confirmar eliminación"}
             </button>
           </>
         }
       >
-        <p className="text-sm text-mist">
+        <p className="text-sm text-slate">
           Se eliminará el registro y la fotografía asociada. Esta acción no se puede deshacer.
         </p>
       </Modal>

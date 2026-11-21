@@ -4,7 +4,6 @@ import {
   ClipboardList,
   History,
   LayoutDashboard,
-  Leaf,
   MapPinned,
   ScanLine,
   X,
@@ -28,38 +27,33 @@ export function Sidebar({ open, onClose, latestId }: SidebarProps) {
   return (
     <>
       <div
-        className={`fixed inset-0 z-40 bg-forest/40 transition lg:hidden ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}
+        className={`fixed inset-0 z-40 bg-ink/20 transition lg:hidden ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}
         onClick={onClose}
       />
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-mint/60 bg-forest text-white transition-transform duration-300 lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-border bg-paper transition-transform duration-300 lg:static lg:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between px-5 py-5">
-          <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-leaf p-2">
-              <Leaf className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-sm font-bold tracking-wide">AgroAlerta AI</p>
-              <p className="text-[11px] text-mint/80">Inteligencia que protege tus cultivos.</p>
-            </div>
+        <div className="flex items-center justify-between px-6 py-6">
+          <div>
+            <p className="font-display text-[22px] tracking-tight text-ink">AgroAlerta</p>
+            <p className="mt-1 text-[14px] text-ash">AI para café</p>
           </div>
-          <button type="button" className="rounded-lg p-1 hover:bg-white/10 lg:hidden" onClick={onClose}>
+          <button type="button" className="rounded-pill p-2 text-slate hover:bg-mist lg:hidden" onClick={onClose}>
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        <nav className="mt-2 flex-1 space-y-1 px-3">
+        <nav className="flex-1 space-y-1 px-4">
           {links.map(({ to, label, icon: Icon }) => (
             <NavLink
               key={to}
               to={to}
               onClick={onClose}
               className={({ isActive }) =>
-                `flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
-                  isActive ? "bg-leaf text-white" : "text-mint hover:bg-white/10 hover:text-white"
+                `flex items-center gap-3 rounded-pill px-4 py-2.5 text-[16px] transition ${
+                  isActive ? "bg-ink text-paper" : "text-ink hover:bg-mist"
                 }`
               }
             >
@@ -72,8 +66,8 @@ export function Sidebar({ open, onClose, latestId }: SidebarProps) {
               to={`/diagnostico/${latestId}`}
               onClick={onClose}
               className={({ isActive }) =>
-                `flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
-                  isActive ? "bg-leaf text-white" : "bg-white/10 text-white hover:bg-white/15"
+                `mt-3 flex items-center gap-3 rounded-pill px-4 py-2.5 text-[16px] transition ${
+                  isActive ? "bg-peach text-sienna" : "bg-peach/60 text-sienna hover:bg-peach"
                 }`
               }
             >
@@ -83,9 +77,9 @@ export function Sidebar({ open, onClose, latestId }: SidebarProps) {
           ) : null}
         </nav>
 
-        <div className="m-4 rounded-2xl bg-white/10 p-4 text-xs text-mint">
-          <p className="font-semibold text-white">MVP de demostración</p>
-          <p className="mt-1 leading-relaxed">
+        <div className="m-4 rounded-card bg-mist p-5 text-[14px] text-slate">
+          <p className="text-[15px] text-ink">MVP de demostración</p>
+          <p className="mt-2 leading-relaxed">
             Entorno de un solo usuario. Los resultados de IA requieren validación técnica.
           </p>
         </div>

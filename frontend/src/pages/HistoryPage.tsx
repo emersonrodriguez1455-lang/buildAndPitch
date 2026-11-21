@@ -67,9 +67,9 @@ export function HistoryPage() {
         subtitle="Consulta inspecciones, da seguimiento y compara si el cultivo mejora."
       />
 
-      <div className="card-surface mb-5 grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-5">
+      <div className="card-surface mb-8 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
         <div className="relative xl:col-span-2">
-          <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-mist" />
+          <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-slate" />
           <input
             className="input-field pl-9"
             placeholder="Buscar por clasificación u observaciones"
@@ -146,59 +146,59 @@ export function HistoryPage() {
           }
         />
       ) : (
-        <div className="card-surface overflow-hidden">
+        <div className="card-elevated overflow-hidden !p-0">
           <div className="overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
-              <thead className="bg-canvas text-xs uppercase text-mist">
+            <table className="min-w-full text-left text-[15px]">
+              <thead className="bg-fog text-[13px] text-ash">
                 <tr>
-                  <th className="px-4 py-3">Fotografía</th>
-                  <th className="px-4 py-3">Clasificación</th>
-                  <th className="px-4 py-3">Confianza</th>
-                  <th className="px-4 py-3">Finca</th>
-                  <th className="px-4 py-3">Parcela</th>
-                  <th className="px-4 py-3">Fecha</th>
-                  <th className="px-4 py-3">Estado</th>
-                  <th className="px-4 py-3">Seguimiento</th>
+                  <th className="px-5 py-4 font-normal">Fotografía</th>
+                  <th className="px-5 py-4 font-normal">Clasificación</th>
+                  <th className="px-5 py-4 font-normal">Confianza</th>
+                  <th className="px-5 py-4 font-normal">Finca</th>
+                  <th className="px-5 py-4 font-normal">Parcela</th>
+                  <th className="px-5 py-4 font-normal">Fecha</th>
+                  <th className="px-5 py-4 font-normal">Estado</th>
+                  <th className="px-5 py-4 font-normal">Seguimiento</th>
                 </tr>
               </thead>
               <tbody>
                 {items.map((item) => (
-                  <tr key={item.id} className="border-t border-mint/70 hover:bg-mint/20">
-                    <td className="px-4 py-3">
+                  <tr key={item.id} className="border-t border-border hover:bg-fog">
+                    <td className="px-5 py-4">
                       <Link to={`/diagnostico/${item.id}`}>
                         <img
                           src={apiImageUrl(item.image_url, getApiBase())}
                           alt=""
-                          className="h-12 w-12 rounded-lg object-cover"
+                          className="h-12 w-12 rounded-image object-cover"
                         />
                       </Link>
                     </td>
-                    <td className="px-4 py-3">
-                      <Link to={`/diagnostico/${item.id}`} className="font-medium text-ink hover:text-leaf">
+                    <td className="px-5 py-4">
+                      <Link to={`/diagnostico/${item.id}`} className="text-ink hover:underline">
                         {item.predicted_class_label}
                       </Link>
-                      {item.trend ? <p className="mt-1 text-xs text-mist">{item.trend.label}</p> : null}
+                      {item.trend ? <p className="mt-1 text-[13px] text-slate">{item.trend.label}</p> : null}
                     </td>
-                    <td className="px-4 py-3 text-mist">{formatPercent(item.confidence)}</td>
-                    <td className="px-4 py-3 text-mist">{item.farm_name}</td>
-                    <td className="px-4 py-3 text-mist">{item.plot_name}</td>
-                    <td className="px-4 py-3 text-mist">{formatDateTime(item.created_at)}</td>
-                    <td className="px-4 py-3">
+                    <td className="px-5 py-4 text-slate">{formatPercent(item.confidence)}</td>
+                    <td className="px-5 py-4 text-slate">{item.farm_name}</td>
+                    <td className="px-5 py-4 text-slate">{item.plot_name}</td>
+                    <td className="px-5 py-4 text-slate">{formatDateTime(item.created_at)}</td>
+                    <td className="px-5 py-4">
                       <span
-                        className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-                          item.is_healthy ? "bg-mint text-leaf" : "bg-warn/15 text-warn"
+                        className={`rounded-pill px-3 py-1 text-[13px] ${
+                          item.is_healthy ? "bg-mist text-ink" : "bg-peach text-sienna"
                         }`}
                       >
                         {item.is_healthy ? "Aparentemente sana" : "Posible problema"}
                       </span>
                       {(item.follow_up_count ?? 0) > 0 ? (
-                        <p className="mt-1 text-xs text-mist">{item.follow_up_count} seguimiento(s)</p>
+                        <p className="mt-1 text-[13px] text-slate">{item.follow_up_count} seguimiento(s)</p>
                       ) : null}
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-5 py-4">
                       <Link
                         to={`/diagnostico/${item.id}/seguimiento`}
-                        className="inline-flex items-center gap-1 rounded-lg bg-mint px-2.5 py-1.5 text-xs font-semibold text-forest hover:bg-leaf hover:text-white"
+                        className="inline-flex items-center gap-1 rounded-pill border border-ink px-3 py-1.5 text-[13px] text-ink transition hover:bg-mist"
                       >
                         <RefreshCw className="h-3.5 w-3.5" />
                         Seguir
@@ -209,7 +209,7 @@ export function HistoryPage() {
               </tbody>
             </table>
           </div>
-          <div className="flex items-center justify-between border-t border-mint px-4 py-3 text-sm text-mist">
+          <div className="flex items-center justify-between border-t border-border px-5 py-4 text-[15px] text-slate">
             <span>
               {total} registro{total === 1 ? "" : "s"}
             </span>

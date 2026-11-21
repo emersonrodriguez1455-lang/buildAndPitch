@@ -14,9 +14,9 @@ export function formatPercent(value: number, digits = 1): string {
 }
 
 export function confidenceTone(confidence: number): string {
-  if (confidence >= 0.7) return "text-leaf";
-  if (confidence >= 0.45) return "text-warn";
-  return "text-alert";
+  if (confidence >= 0.7) return "text-ink";
+  if (confidence >= 0.45) return "text-sienna";
+  return "text-ash";
 }
 
 export function apiImageUrl(path: string, apiBase: string): string {
