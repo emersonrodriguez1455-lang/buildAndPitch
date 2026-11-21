@@ -13,13 +13,11 @@ import type {
   TimelinePoint,
 } from "../types";
 
-// Same-origin in production (Docker / Railway). Local Vite uses backend :8000.
+// Prefer VITE_API_URL. Otherwise same-origin (Vite proxy in dev, FastAPI SPA in prod).
 const API_BASE =
   import.meta.env.VITE_API_URL !== undefined && import.meta.env.VITE_API_URL !== ""
     ? import.meta.env.VITE_API_URL
-    : import.meta.env.DEV
-      ? "http://127.0.0.1:8000"
-      : "";
+    : "";
 
 export const api = axios.create({
   baseURL: API_BASE,

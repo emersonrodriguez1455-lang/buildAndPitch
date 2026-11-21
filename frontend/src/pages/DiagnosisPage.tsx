@@ -3,8 +3,9 @@ import { Link, useOutletContext } from "react-router-dom";
 import { ImagePlus, Loader2, RefreshCw, Trash2, Upload } from "lucide-react";
 import { PageHeader } from "../components/common/PageHeader";
 import { CarePlanPanel } from "../components/diagnosis/CarePlanPanel";
-import { ResultCard } from "../components/diagnosis/ResultCard";
+import { ResultCard, type ResultRevealStage } from "../components/diagnosis/ResultCard";
 import { useToast } from "../contexts/ToastContext";
+import { useProgressiveReveal } from "../hooks/useProgressiveReveal";
 import {
   createDiagnosis,
   extractErrorMessage,
@@ -21,7 +22,14 @@ const STEPS = [
   "Ejecutando inteligencia artificial",
   "Generando resultado",
   "Diagnóstico completado",
+  "Mostrando clasificación",
+  "Mostrando confianza",
+  "Mostrando orientación",
+  "Armando plan de acción",
 ];
+
+const RESULT_REVEAL_DELAYS = [350, 900, 1600, 2300];
+const PLAN_REVEAL_DELAYS = [2800, 3600, 4400];
 
 const ACCEPTED = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const MAX_MB = 10;
@@ -40,6 +48,18 @@ export function DiagnosisPage() {
   const [analyzing, setAnalyzing] = useState(false);
   const [stepIndex, setStepIndex] = useState(-1);
   const [result, setResult] = useState<Diagnosis | null>(null);
+
+  const resultStage = useProgressiveReveal(Boolean(result), RESULT_REVEAL_DELAYS, result?.id);
+  const planStage = useProgressiveReveal(Boolean(result), PLAN_REVEAL_DELAYS, result?.id);
+
+  useEffect(() => {
+    if (!result) return;
+    // Sync process checklist with reveal stages after API success
+    if (resultStage >= 1) setStepIndex((s) => Math.max(s, 6));
+    if (resultStage >= 2) setStepIndex((s) => Math.max(s, 7));
+    if (resultStage >= 3) setStepIndex((s) => Math.max(s, 8));
+    if (planStage >= 1) setStepIndex((s) => Math.max(s, 9));
+  }, [result, resultStage, planStage]);
 
   useEffect(() => {
     const load = async () => {
@@ -118,9 +138,9 @@ export function DiagnosisPage() {
     setStepIndex(1);
 
     const timers = [
-      window.setTimeout(() => setStepIndex(2), 400),
-      window.setTimeout(() => setStepIndex(3), 900),
-      window.setTimeout(() => setStepIndex(4), 1600),
+      window.setTimeout(() => setStepIndex(2), 500),
+      window.setTimeout(() => setStepIndex(3), 1100),
+      window.setTimeout(() => setStepIndex(4), 1900),
     ];
 
     try {
@@ -136,8 +156,8 @@ export function DiagnosisPage() {
       rememberLastDiagnosisId(diagnosis.id);
       notify("Diagnóstico completado. Tu plan quedó guardado para consultarlo cuando quieras.", "success");
       window.setTimeout(() => {
-        document.getElementById("plan-activo")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 150);
+        document.getElementById("resultado-diagnostico")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 200);
     } catch (error) {
       setStepIndex(file ? 0 : -1);
       notify(extractErrorMessage(error, "No se pudo completar el análisis."), "error");
@@ -146,6 +166,10 @@ export function DiagnosisPage() {
       setAnalyzing(false);
     }
   };
+
+  const revealStage = Math.min(4, resultStage) as ResultRevealStage;
+  const planReveal = Math.min(3, planStage) as 0 | 1 | 2 | 3;
+  const showStickyPlan = planStage >= 1 && result;
 
   return (
     <div>
@@ -284,18 +308,24 @@ export function DiagnosisPage() {
 
         <section className="card-elevated">
           <h3 className="font-display text-[26px] tracking-tight text-ink">Estado del proceso</h3>
-          <ol className="mt-4 space-y-3">
+          <ol className="mt-4 space-y-2">
             {STEPS.map((step, index) => {
               const active = index <= stepIndex;
-              const current = index === stepIndex && analyzing;
+              const current = index === stepIndex && (analyzing || (result && planStage < 3));
               return (
                 <li
                   key={step}
-                  className={`flex items-center gap-3 rounded-input px-3 py-2 text-[15px] ${
+                  className={`flex items-center gap-3 rounded-input px-3 py-2 text-[14px] transition-colors sm:text-[15px] ${
                     active ? "bg-mist text-ink" : "bg-fog text-slate"
                   }`}
                 >
-                  <span className={active ? "step-badge" : "flex h-6 w-6 items-center justify-center rounded-full bg-paper text-[12px] text-slate"}>
+                  <span
+                    className={
+                      active
+                        ? "step-badge"
+                        : "flex h-6 w-6 items-center justify-center rounded-full bg-paper text-[12px] text-slate"
+                    }
+                  >
                     {index + 1}
                   </span>
                   <span className={current ? "animate-pulseSoft" : ""}>{step}</span>
@@ -311,39 +341,45 @@ export function DiagnosisPage() {
       </div>
 
       {result ? (
-        <section className="mt-10 space-y-5">
-          <div className="sticky top-[4.5rem] z-20 card-elevated !py-4 backdrop-blur">
-            <p className="section-label">Plan guardado · no se pierde</p>
-            <p className="mt-1 text-[18px] text-ink">
-              {result.care_plan?.headline || result.predicted_class_label}
-            </p>
-            <p className="mt-1 line-clamp-2 text-[14px] text-slate">
-              {result.care_plan?.primary_steps?.[0] || result.recommendation}
-            </p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <a href="#plan-activo" className="btn-secondary !h-9 text-[14px]">
-                Ver pasos completos
-              </a>
-              <Link to={`/diagnostico/${result.id}`} className="btn-primary !h-9 text-[14px]">
-                Abrir caso guardado
+        <section id="resultado-diagnostico" className="mt-10 space-y-5">
+          {showStickyPlan ? (
+            <div className="sticky top-[4.5rem] z-20 card-elevated !py-4 backdrop-blur animate-fadeUp">
+              <p className="section-label">Plan guardado · no se pierde</p>
+              <p className="mt-1 text-[18px] text-ink">
+                {result.care_plan?.headline || result.predicted_class_label}
+              </p>
+              <p className="mt-1 line-clamp-2 text-[14px] text-slate">
+                {result.care_plan?.primary_steps?.[0] || result.recommendation}
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <a href="#plan-activo" className="btn-secondary !h-9 text-[14px]">
+                  Ver pasos completos
+                </a>
+                <Link to={`/diagnostico/${result.id}`} className="btn-primary !h-9 text-[14px]">
+                  Abrir caso guardado
+                </Link>
+              </div>
+            </div>
+          ) : null}
+
+          <h3 className="font-display text-[32px] tracking-tight text-ink animate-fadeUp">
+            Resultado del diagnóstico
+          </h3>
+          <ResultCard diagnosis={result} revealStage={revealStage} />
+          <div id="plan-activo">
+            <CarePlanPanel carePlan={result.care_plan} trend={result.trend} revealStage={planReveal} />
+          </div>
+          {planStage >= 3 ? (
+            <div className="flex flex-wrap gap-2 animate-fadeUp">
+              <Link to={`/diagnostico/${result.id}`} className="btn-secondary">
+                Ver detalle del caso
+              </Link>
+              <Link to={`/diagnostico/${result.id}/seguimiento`} className="btn-primary">
+                <RefreshCw className="h-4 w-4" />
+                Programar seguimiento
               </Link>
             </div>
-          </div>
-
-          <h3 className="font-display text-[32px] tracking-tight text-ink">Resultado del diagnóstico</h3>
-          <ResultCard diagnosis={result} />
-          <div id="plan-activo">
-            <CarePlanPanel carePlan={result.care_plan} trend={result.trend} />
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Link to={`/diagnostico/${result.id}`} className="btn-secondary">
-              Ver detalle del caso
-            </Link>
-            <Link to={`/diagnostico/${result.id}/seguimiento`} className="btn-primary">
-              <RefreshCw className="h-4 w-4" />
-              Programar seguimiento
-            </Link>
-          </div>
+          ) : null}
         </section>
       ) : null}
     </div>

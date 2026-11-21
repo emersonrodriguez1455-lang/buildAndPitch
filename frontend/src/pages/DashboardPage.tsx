@@ -11,7 +11,7 @@ import {
 import { DiseaseChart } from "../components/charts/DiseaseChart";
 import { TimelineChart } from "../components/charts/TimelineChart";
 import { EmptyState } from "../components/common/EmptyState";
-import { LoadingBlock } from "../components/common/LoadingBlock";
+import { DashboardSkeleton } from "../components/common/Skeleton";
 import { StatCard } from "../components/common/StatCard";
 import { LatestPlanCard } from "../components/diagnosis/LatestPlanCard";
 import { useToast } from "../contexts/ToastContext";
@@ -86,7 +86,7 @@ export function DashboardPage() {
     void load();
   }, [notify]);
 
-  if (loading) return <LoadingBlock label="Preparando el panel…" />;
+  if (loading) return <DashboardSkeleton />;
 
   return (
     <div className="page-shell space-y-16 pb-16">

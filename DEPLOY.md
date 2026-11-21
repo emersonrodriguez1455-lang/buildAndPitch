@@ -4,7 +4,19 @@ El proyecto (React + FastAPI + ConvNeXt/PyTorch) necesita **~1–2 GB RAM** al c
 Por eso el hosting gratis de 512 MB (Render free clásico) suele fallar. La opción más
 realista y gratuita (con créditos de prueba) es **Railway**.
 
-URL típica: `https://agroalerta-ai-production.up.railway.app`
+## Opción rápida (ahora): túnel Cloudflare (PC encendido)
+
+Con backend (`:8000`) + Vite (`:5173`) corriendo en esta máquina:
+
+```powershell
+# 1) Asegura VITE_API_URL vacío en frontend/.env (usa proxy /api)
+# 2) Túnel público
+& "$env:LOCALAPPDATA\cloudflared\cloudflared.exe" tunnel --url http://127.0.0.1:5173
+```
+
+Te da una URL `https://….trycloudflare.com` compartible. Vive mientras el PC y el túnel sigan activos.
+
+URL típica Railway: `https://agroalerta-ai-production.up.railway.app`
 
 ## Opción recomendada: Railway (gratis con créditos)
 

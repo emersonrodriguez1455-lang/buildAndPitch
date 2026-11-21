@@ -12,7 +12,7 @@ import { BarChart3 } from "lucide-react";
 import { DiseaseChart } from "../components/charts/DiseaseChart";
 import { TimelineChart } from "../components/charts/TimelineChart";
 import { EmptyState } from "../components/common/EmptyState";
-import { LoadingBlock } from "../components/common/LoadingBlock";
+import { StatisticsSkeleton } from "../components/common/Skeleton";
 import { PageHeader } from "../components/common/PageHeader";
 import { StatCard } from "../components/common/StatCard";
 import { useToast } from "../contexts/ToastContext";
@@ -58,7 +58,7 @@ export function StatisticsPage() {
     void load();
   }, [granularity, notify]);
 
-  if (loading) return <LoadingBlock label="Calculando estadísticas..." />;
+  if (loading) return <StatisticsSkeleton />;
 
   const healthyIssue = [
     {

@@ -4,7 +4,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MapPinned, Pencil, Plus, Trash2 } from "lucide-react";
 import { EmptyState } from "../components/common/EmptyState";
-import { LoadingBlock } from "../components/common/LoadingBlock";
+import { FarmsSkeleton } from "../components/common/Skeleton";
 import { Modal } from "../components/common/Modal";
 import { PageHeader } from "../components/common/PageHeader";
 import { useToast } from "../contexts/ToastContext";
@@ -191,7 +191,7 @@ export function FarmsPage() {
     }
   };
 
-  if (loading) return <LoadingBlock label="Cargando fincas y parcelas..." />;
+  if (loading) return <FarmsSkeleton />;
 
   return (
     <div>

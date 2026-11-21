@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, RefreshCw, Trash2 } from "lucide-react";
 import { CarePlanPanel } from "../components/diagnosis/CarePlanPanel";
 import { FollowUpTimeline } from "../components/diagnosis/FollowUpTimeline";
-import { LoadingBlock } from "../components/common/LoadingBlock";
+import { DiagnosisDetailSkeleton } from "../components/common/Skeleton";
 import { PageHeader } from "../components/common/PageHeader";
 import { ResultCard } from "../components/diagnosis/ResultCard";
 import { Modal } from "../components/common/Modal";
@@ -61,7 +61,7 @@ export function DiagnosisDetailPage() {
     }
   };
 
-  if (loading) return <LoadingBlock label="Cargando detalle..." />;
+  if (loading) return <DiagnosisDetailSkeleton />;
   if (!diagnosis) {
     return (
       <div className="card-surface p-8 text-center">

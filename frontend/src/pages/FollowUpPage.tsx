@@ -2,10 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, ImagePlus, Loader2, Trash2, Upload } from "lucide-react";
 import { CarePlanPanel } from "../components/diagnosis/CarePlanPanel";
-import { LoadingBlock } from "../components/common/LoadingBlock";
+import { FollowUpSkeleton } from "../components/common/Skeleton";
 import { PageHeader } from "../components/common/PageHeader";
-import { ResultCard } from "../components/diagnosis/ResultCard";
+import { ResultCard, type ResultRevealStage } from "../components/diagnosis/ResultCard";
 import { useToast } from "../contexts/ToastContext";
+import { useProgressiveReveal } from "../hooks/useProgressiveReveal";
 import {
   createFollowUp,
   extractErrorMessage,
@@ -13,6 +14,9 @@ import {
 } from "../services/api";
 import type { Diagnosis } from "../types";
 import { rememberLastDiagnosisId } from "../utils/lastPlan";
+
+const RESULT_REVEAL_DELAYS = [350, 900, 1600, 2300];
+const PLAN_REVEAL_DELAYS = [2800, 3600, 4400];
 
 const ACCEPTED = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const MAX_MB = 10;
@@ -28,6 +32,8 @@ export function FollowUpPage() {
   const [observations, setObservations] = useState("");
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState<Diagnosis | null>(null);
+  const resultStage = useProgressiveReveal(Boolean(result), RESULT_REVEAL_DELAYS, result?.id);
+  const planStage = useProgressiveReveal(Boolean(result), PLAN_REVEAL_DELAYS, result?.id);
 
   useEffect(() => {
     const load = async () => {
@@ -93,7 +99,7 @@ export function FollowUpPage() {
     }
   };
 
-  if (loading) return <LoadingBlock label="Preparando seguimiento..." />;
+  if (loading) return <FollowUpSkeleton />;
   if (!parent) {
     return (
       <div className="card-surface p-8 text-center">
@@ -202,16 +208,25 @@ export function FollowUpPage() {
         </section>
       ) : (
         <div className="space-y-5">
-          <ResultCard diagnosis={result} />
-          <CarePlanPanel carePlan={result.care_plan} trend={result.trend} />
-          <div className="flex flex-wrap gap-2">
-            <Link to={`/diagnostico/${result.id}`} className="btn-primary">
-              Ver caso actualizado
-            </Link>
-            <Link to="/historial" className="btn-secondary">
-              Ir al historial
-            </Link>
-          </div>
+          <ResultCard
+            diagnosis={result}
+            revealStage={Math.min(4, resultStage) as ResultRevealStage}
+          />
+          <CarePlanPanel
+            carePlan={result.care_plan}
+            trend={result.trend}
+            revealStage={Math.min(3, planStage) as 0 | 1 | 2 | 3}
+          />
+          {planStage >= 3 ? (
+            <div className="flex flex-wrap gap-2 animate-fadeUp">
+              <Link to={`/diagnostico/${result.id}`} className="btn-primary">
+                Ver caso actualizado
+              </Link>
+              <Link to="/historial" className="btn-secondary">
+                Ir al historial
+              </Link>
+            </div>
+          ) : null}
         </div>
       )}
     </div>

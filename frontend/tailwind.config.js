@@ -82,8 +82,8 @@ export default {
         },
       },
       animation: {
-        fadeUp: "fadeUp 0.32s cubic-bezier(0.22, 1, 0.36, 1)",
-        fadeIn: "fadeIn 0.42s cubic-bezier(0.22, 1, 0.36, 1)",
+        fadeUp: "fadeUp 0.32s cubic-bezier(0.22, 1, 0.36, 1) both",
+        fadeIn: "fadeIn 0.42s cubic-bezier(0.22, 1, 0.36, 1) both",
         pulseSoft: "pulseSoft 1.6s ease-in-out infinite",
       },
     },
