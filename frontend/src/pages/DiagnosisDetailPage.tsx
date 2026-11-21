@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, Trash2 } from "lucide-react";
+import { ArrowLeft, RefreshCw, Trash2 } from "lucide-react";
+import { CarePlanPanel } from "../components/diagnosis/CarePlanPanel";
+import { FollowUpTimeline } from "../components/diagnosis/FollowUpTimeline";
 import { LoadingBlock } from "../components/common/LoadingBlock";
 import { PageHeader } from "../components/common/PageHeader";
 import { ResultCard } from "../components/diagnosis/ResultCard";
 import { Modal } from "../components/common/Modal";
 import { useToast } from "../contexts/ToastContext";
-import { deleteDiagnosis, extractErrorMessage, getDiagnosis } from "../services/api";
-import type { Diagnosis } from "../types";
+import {
+  deleteDiagnosis,
+  extractErrorMessage,
+  getDiagnosis,
+  getDiagnosisTimeline,
+} from "../services/api";
+import type { Diagnosis, DiagnosisTimelineResponse } from "../types";
 
 export function DiagnosisDetailPage() {
   const { id } = useParams();
@@ -15,6 +22,7 @@ export function DiagnosisDetailPage() {
   const { notify } = useToast();
   const [loading, setLoading] = useState(true);
   const [diagnosis, setDiagnosis] = useState<Diagnosis | null>(null);
+  const [timeline, setTimeline] = useState<DiagnosisTimelineResponse | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -23,8 +31,12 @@ export function DiagnosisDetailPage() {
       if (!id) return;
       try {
         setLoading(true);
-        const data = await getDiagnosis(Number(id));
+        const [data, timelineData] = await Promise.all([
+          getDiagnosis(Number(id)),
+          getDiagnosisTimeline(Number(id)),
+        ]);
         setDiagnosis(data);
+        setTimeline(timelineData);
       } catch (error) {
         notify(extractErrorMessage(error, "No se pudo cargar el diagnóstico."), "error");
       } finally {
@@ -64,10 +76,14 @@ export function DiagnosisDetailPage() {
   return (
     <div>
       <PageHeader
-        title={`Diagnóstico #${diagnosis.id}`}
-        subtitle="Detalle completo de la inspección y orientación general."
+        title={`Caso #${diagnosis.id}`}
+        subtitle="Resultado, plan de acción y evolución del seguimiento."
         actions={
           <div className="flex flex-wrap gap-2">
+            <Link to={`/diagnostico/${diagnosis.id}/seguimiento`} className="btn-primary">
+              <RefreshCw className="h-4 w-4" />
+              Dar seguimiento
+            </Link>
             <Link to="/historial" className="btn-secondary">
               <ArrowLeft className="h-4 w-4" />
               Historial
@@ -80,7 +96,34 @@ export function DiagnosisDetailPage() {
         }
       />
 
+      <div className="mb-5 rounded-2xl border border-leaf/20 bg-mint/40 px-4 py-3 text-sm text-ink">
+        {diagnosis.is_healthy ? (
+          <>
+            <strong>Estado:</strong> aparentemente sano. Usa el plan de prevención y agenda una revisión en{" "}
+            {diagnosis.care_plan?.next_check_days ?? 14} días.
+          </>
+        ) : (
+          <>
+            <strong>Estado:</strong> posible problema ({diagnosis.predicted_class_label}). Verifica en campo,
+            sigue los pasos de manejo y registra un nuevo escaneo para ver si mejora.
+          </>
+        )}
+        {(diagnosis.follow_up_count ?? 0) > 0 ? (
+          <span className="ml-1 text-mist">· {diagnosis.follow_up_count} seguimiento(s) registrados</span>
+        ) : null}
+      </div>
+
       <ResultCard diagnosis={diagnosis} />
+
+      <div className="mt-5">
+        <CarePlanPanel carePlan={diagnosis.care_plan} trend={diagnosis.trend} />
+      </div>
+
+      {timeline ? (
+        <div className="mt-5">
+          <FollowUpTimeline timeline={timeline} />
+        </div>
+      ) : null}
 
       {diagnosis.observations ? (
         <section className="card-surface mt-5 p-5">
@@ -88,6 +131,13 @@ export function DiagnosisDetailPage() {
           <p className="mt-2 text-sm text-mist">{diagnosis.observations}</p>
         </section>
       ) : null}
+
+      <div className="mt-5 flex flex-wrap gap-2">
+        <Link to={`/diagnostico/${diagnosis.id}/seguimiento`} className="btn-primary">
+          <RefreshCw className="h-4 w-4" />
+          Nueva foto de seguimiento
+        </Link>
+      </div>
 
       <Modal
         open={confirmOpen}

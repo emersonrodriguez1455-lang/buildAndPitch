@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { useOutletContext } from "react-router-dom";
-import { ImagePlus, Loader2, Trash2, Upload } from "lucide-react";
+import { Link, useOutletContext } from "react-router-dom";
+import { ImagePlus, Loader2, RefreshCw, Trash2, Upload } from "lucide-react";
 import { PageHeader } from "../components/common/PageHeader";
+import { CarePlanPanel } from "../components/diagnosis/CarePlanPanel";
 import { ResultCard } from "../components/diagnosis/ResultCard";
 import { useToast } from "../contexts/ToastContext";
 import {
@@ -309,9 +310,19 @@ export function DiagnosisPage() {
       </div>
 
       {result ? (
-        <section className="mt-6">
-          <h3 className="mb-4 text-lg font-semibold text-ink">Resultado del diagnóstico</h3>
+        <section className="mt-6 space-y-5">
+          <h3 className="text-lg font-semibold text-ink">Resultado del diagnóstico</h3>
           <ResultCard diagnosis={result} />
+          <CarePlanPanel carePlan={result.care_plan} trend={result.trend} />
+          <div className="flex flex-wrap gap-2">
+            <Link to={`/diagnostico/${result.id}`} className="btn-secondary">
+              Ver detalle del caso
+            </Link>
+            <Link to={`/diagnostico/${result.id}/seguimiento`} className="btn-primary">
+              <RefreshCw className="h-4 w-4" />
+              Programar seguimiento
+            </Link>
+          </div>
         </section>
       ) : null}
     </div>

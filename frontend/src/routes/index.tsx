@@ -4,6 +4,7 @@ import { DashboardPage } from "../pages/DashboardPage";
 import { DiagnosisDetailPage } from "../pages/DiagnosisDetailPage";
 import { DiagnosisPage } from "../pages/DiagnosisPage";
 import { FarmsPage } from "../pages/FarmsPage";
+import { FollowUpPage } from "../pages/FollowUpPage";
 import { HistoryPage } from "../pages/HistoryPage";
 import { StatisticsPage } from "../pages/StatisticsPage";
 
@@ -14,6 +15,7 @@ export function AppRoutes() {
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/diagnostico" element={<DiagnosisPage />} />
+        <Route path="/diagnostico/:id/seguimiento" element={<FollowUpPage />} />
         <Route path="/diagnostico/:id" element={<DiagnosisDetailPage />} />
         <Route path="/historial" element={<HistoryPage />} />
         <Route path="/fincas" element={<FarmsPage />} />

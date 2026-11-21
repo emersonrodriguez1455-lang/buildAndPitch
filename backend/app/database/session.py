@@ -68,9 +68,33 @@ def get_db() -> Generator[Session, None, None]:
         db.close()
 
 
+def _migrate_sqlite_columns(engine: Engine) -> None:
+    """Add follow-up columns to existing SQLite databases without Alembic."""
+    settings = get_settings()
+    if not settings.database_url.startswith("sqlite"):
+        return
+
+    with engine.begin() as connection:
+        rows = connection.exec_driver_sql("PRAGMA table_info(diagnoses)").fetchall()
+        existing = {row[1] for row in rows}
+        if not existing:
+            return
+        if "parent_diagnosis_id" not in existing:
+            connection.exec_driver_sql(
+                "ALTER TABLE diagnoses ADD COLUMN parent_diagnosis_id INTEGER"
+            )
+        if "root_diagnosis_id" not in existing:
+            connection.exec_driver_sql("ALTER TABLE diagnoses ADD COLUMN root_diagnosis_id INTEGER")
+        connection.exec_driver_sql(
+            "UPDATE diagnoses SET root_diagnosis_id = id WHERE root_diagnosis_id IS NULL"
+        )
+
+
 def init_db() -> None:
     from app import models  # noqa: F401
 
     settings = get_settings()
     settings.upload_path.mkdir(parents=True, exist_ok=True)
-    Base.metadata.create_all(bind=get_engine())
+    engine = get_engine()
+    Base.metadata.create_all(bind=engine)
+    _migrate_sqlite_columns(engine)

@@ -19,7 +19,8 @@ export function AppLayout() {
   const [modelLoading, setModelLoading] = useState(false);
 
   const title = useMemo(() => {
-    if (location.pathname.startsWith("/diagnostico/")) return "Detalle del diagnóstico";
+    if (location.pathname.includes("/seguimiento")) return "Seguimiento del caso";
+    if (location.pathname.startsWith("/diagnostico/")) return "Detalle del caso";
     return titles[location.pathname] || "AgroAlerta AI";
   }, [location.pathname]);
 

@@ -29,6 +29,27 @@ export interface AlternativeScore {
   confidence: number;
 }
 
+export interface CarePlan {
+  mode: "prevencion" | "verificar" | "manejar" | string;
+  headline: string;
+  summary: string;
+  severity_level: string;
+  class_name: string;
+  class_label: string;
+  primary_steps: string[];
+  secondary_steps: string[];
+  technician_advice: string;
+  next_check_days: number;
+  disclaimer: string;
+}
+
+export interface TrendInfo {
+  code: string;
+  label: string;
+  description: string;
+  direction: "up" | "down" | "neutral" | string;
+}
+
 export interface Diagnosis {
   id: number;
   farm_id: number;
@@ -48,6 +69,11 @@ export interface Diagnosis {
   status: string;
   alternatives?: AlternativeScore[];
   original_filename?: string;
+  parent_diagnosis_id?: number | null;
+  root_diagnosis_id?: number | null;
+  follow_up_count?: number;
+  care_plan?: CarePlan | null;
+  trend?: TrendInfo | null;
 }
 
 export interface DiagnosisListResponse {
@@ -56,6 +82,27 @@ export interface DiagnosisListResponse {
   page: number;
   page_size: number;
   total_pages: number;
+}
+
+export interface DiagnosisTimelineItem {
+  id: number;
+  predicted_class: string;
+  predicted_class_label: string;
+  confidence: number;
+  is_healthy: boolean;
+  created_at: string;
+  image_url: string;
+  observations: string | null;
+  trend: TrendInfo | null;
+  is_current: boolean;
+}
+
+export interface DiagnosisTimelineResponse {
+  root_diagnosis_id: number;
+  current_id: number;
+  items: DiagnosisTimelineItem[];
+  overall_trend: TrendInfo;
+  care_plan: CarePlan;
 }
 
 export interface StatisticsSummary {

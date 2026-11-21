@@ -2,6 +2,7 @@ import axios from "axios";
 import type {
   Diagnosis,
   DiagnosisListResponse,
+  DiagnosisTimelineResponse,
   DiseaseStatItem,
   Farm,
   FarmActivityItem,
@@ -88,6 +89,13 @@ export async function createDiagnosis(formData: FormData): Promise<Diagnosis> {
   return data;
 }
 
+export async function createFollowUp(diagnosisId: number, formData: FormData): Promise<Diagnosis> {
+  const { data } = await api.post<Diagnosis>(`/api/diagnosis/${diagnosisId}/follow-up`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return data;
+}
+
 export async function listDiagnoses(params: Record<string, string | number | undefined>): Promise<DiagnosisListResponse> {
   const { data } = await api.get<DiagnosisListResponse>("/api/diagnosis", { params });
   return data;
@@ -95,6 +103,11 @@ export async function listDiagnoses(params: Record<string, string | number | und
 
 export async function getDiagnosis(id: number): Promise<Diagnosis> {
   const { data } = await api.get<Diagnosis>(`/api/diagnosis/${id}`);
+  return data;
+}
+
+export async function getDiagnosisTimeline(id: number): Promise<DiagnosisTimelineResponse> {
+  const { data } = await api.get<DiagnosisTimelineResponse>(`/api/diagnosis/${id}/timeline`);
   return data;
 }
 

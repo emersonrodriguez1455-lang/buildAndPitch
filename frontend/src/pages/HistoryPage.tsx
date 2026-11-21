@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { History, Search } from "lucide-react";
+import { History, RefreshCw, Search } from "lucide-react";
 import { EmptyState } from "../components/common/EmptyState";
 import { LoadingBlock } from "../components/common/LoadingBlock";
 import { PageHeader } from "../components/common/PageHeader";
@@ -64,7 +64,7 @@ export function HistoryPage() {
     <div>
       <PageHeader
         title="Historial de diagnósticos"
-        subtitle="Consulta, filtra y compara inspecciones guardadas en SQLite."
+        subtitle="Consulta inspecciones, da seguimiento y compara si el cultivo mejora."
       />
 
       <div className="card-surface mb-5 grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-5">
@@ -158,6 +158,7 @@ export function HistoryPage() {
                   <th className="px-4 py-3">Parcela</th>
                   <th className="px-4 py-3">Fecha</th>
                   <th className="px-4 py-3">Estado</th>
+                  <th className="px-4 py-3">Seguimiento</th>
                 </tr>
               </thead>
               <tbody>
@@ -176,6 +177,7 @@ export function HistoryPage() {
                       <Link to={`/diagnostico/${item.id}`} className="font-medium text-ink hover:text-leaf">
                         {item.predicted_class_label}
                       </Link>
+                      {item.trend ? <p className="mt-1 text-xs text-mist">{item.trend.label}</p> : null}
                     </td>
                     <td className="px-4 py-3 text-mist">{formatPercent(item.confidence)}</td>
                     <td className="px-4 py-3 text-mist">{item.farm_name}</td>
@@ -189,6 +191,18 @@ export function HistoryPage() {
                       >
                         {item.is_healthy ? "Aparentemente sana" : "Posible problema"}
                       </span>
+                      {(item.follow_up_count ?? 0) > 0 ? (
+                        <p className="mt-1 text-xs text-mist">{item.follow_up_count} seguimiento(s)</p>
+                      ) : null}
+                    </td>
+                    <td className="px-4 py-3">
+                      <Link
+                        to={`/diagnostico/${item.id}/seguimiento`}
+                        className="inline-flex items-center gap-1 rounded-lg bg-mint px-2.5 py-1.5 text-xs font-semibold text-forest hover:bg-leaf hover:text-white"
+                      >
+                        <RefreshCw className="h-3.5 w-3.5" />
+                        Seguir
+                      </Link>
                     </td>
                   </tr>
                 ))}
