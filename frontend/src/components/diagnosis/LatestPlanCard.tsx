@@ -1,94 +1,92 @@
 import { Link } from "react-router-dom";
-import { ClipboardList, RefreshCw, ScanLine } from "lucide-react";
+import { ArrowRight, ClipboardList, RefreshCw, ScanLine } from "lucide-react";
 import type { Diagnosis } from "../../types";
-import { formatDateTime } from "../../utils/format";
+import { formatDateTime, formatPercent } from "../../utils/format";
 
 export function LatestPlanCard({ diagnosis }: { diagnosis: Diagnosis | null }) {
   if (!diagnosis || !diagnosis.care_plan) {
     return (
-      <section className="card-surface border-dashed p-5">
-        <div className="flex items-start gap-3">
-          <div className="rounded-xl bg-mint p-2.5 text-leaf">
-            <ClipboardList className="h-5 w-5" />
+      <section className="rounded-2xl border border-dashed border-mint bg-white px-5 py-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <div className="rounded-xl bg-mint p-2.5 text-leaf">
+              <ClipboardList className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="text-base font-semibold text-ink">Sin plan activo todavía</h3>
+              <p className="mt-1 max-w-xl text-sm text-mist">
+                Haz un análisis y aquí aparecerá la recomendación para consultarla cuando quieras.
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="text-base font-semibold text-ink">Aún no tienes un plan activo</h3>
-            <p className="mt-1 text-sm text-mist">
-              Cuando hagas un análisis, aquí quedará guardada la última recomendación para consultarla cuando quieras.
-            </p>
-            <Link to="/diagnostico" className="btn-primary mt-4">
-              <ScanLine className="h-4 w-4" />
-              Hacer primer análisis
-            </Link>
-          </div>
+          <Link to="/diagnostico" className="btn-primary shrink-0">
+            <ScanLine className="h-4 w-4" />
+            Analizar hoja
+          </Link>
         </div>
       </section>
     );
   }
 
   const plan = diagnosis.care_plan;
+  const steps = plan.primary_steps.slice(0, 3);
 
   return (
-    <section className="card-surface overflow-hidden animate-fadeUp">
-      <div className="border-b border-mint bg-gradient-to-r from-mint/80 to-white px-5 py-4">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-forest">Plan activo · siempre disponible</p>
-            <h3 className="mt-1 text-xl font-bold text-ink">{plan.headline}</h3>
-            <p className="mt-1 text-sm text-mist">
-              {diagnosis.predicted_class_label} · {diagnosis.farm_name} / {diagnosis.plot_name}
-            </p>
-            <p className="mt-1 text-xs text-mist">Último escaneo: {formatDateTime(diagnosis.created_at)}</p>
-          </div>
+    <section className="overflow-hidden rounded-2xl border border-mint bg-white shadow-soft">
+      <div className="flex flex-col gap-4 border-b border-mint/80 px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-wide text-leaf">Plan activo</p>
+          <h3 className="mt-1 text-lg font-bold text-ink sm:text-xl">{diagnosis.predicted_class_label}</h3>
+          <p className="mt-1 truncate text-sm text-mist">
+            {diagnosis.farm_name} · {diagnosis.plot_name} · {formatDateTime(diagnosis.created_at)} ·{" "}
+            {formatPercent(diagnosis.confidence)}
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
           {diagnosis.trend ? (
-            <span
-              className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                diagnosis.trend.direction === "up"
-                  ? "bg-white text-leaf"
-                  : diagnosis.trend.direction === "down"
-                    ? "bg-alert/10 text-alert"
-                    : "bg-white text-mist"
-              }`}
-            >
+            <span className="rounded-full bg-canvas px-3 py-1 text-xs font-semibold text-mist">
               {diagnosis.trend.label}
             </span>
           ) : null}
+          <span className="rounded-full bg-mint px-3 py-1 text-xs font-semibold text-forest">
+            Revisar en {plan.next_check_days} días
+          </span>
         </div>
       </div>
 
-      <div className="grid gap-4 p-5 lg:grid-cols-[1.2fr_0.8fr]">
-        <div>
-          <p className="mb-2 text-sm font-semibold text-ink">Qué hacer ahora</p>
+      <div className="grid gap-0 lg:grid-cols-[1fr_280px]">
+        <div className="px-5 py-4">
+          <p className="mb-3 text-sm font-medium text-ink">{plan.headline}</p>
           <ol className="space-y-2">
-            {plan.primary_steps.slice(0, 4).map((step, index) => (
-              <li key={step} className="flex gap-3 rounded-xl bg-canvas px-3 py-2 text-sm text-ink">
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-leaf text-[11px] font-bold text-white">
+            {steps.map((step, index) => (
+              <li key={step} className="flex gap-3 text-sm text-mist">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-forest text-[11px] font-bold text-white">
                   {index + 1}
                 </span>
-                {step}
+                <span className="text-ink">{step}</span>
               </li>
             ))}
           </ol>
-          {plan.primary_steps.length > 4 ? (
-            <p className="mt-2 text-xs text-mist">+{plan.primary_steps.length - 4} pasos más en el detalle del caso</p>
+          {plan.primary_steps.length > 3 ? (
+            <Link
+              to={`/diagnostico/${diagnosis.id}`}
+              className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-leaf hover:underline"
+            >
+              Ver todos los pasos
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
           ) : null}
         </div>
 
-        <div className="space-y-3 rounded-2xl border border-mint bg-canvas/50 p-4">
-          <p className="text-sm text-mist">{plan.summary}</p>
-          <p className="text-xs font-medium text-forest">
-            Próxima revisión sugerida: dentro de {plan.next_check_days} días
-          </p>
-          <div className="flex flex-col gap-2">
-            <Link to={`/diagnostico/${diagnosis.id}`} className="btn-secondary w-full">
-              <ClipboardList className="h-4 w-4" />
-              Ver recomendación completa
-            </Link>
-            <Link to={`/diagnostico/${diagnosis.id}/seguimiento`} className="btn-primary w-full">
-              <RefreshCw className="h-4 w-4" />
-              Registrar seguimiento
-            </Link>
-          </div>
+        <div className="flex flex-col justify-center gap-2 border-t border-mint bg-canvas/50 px-5 py-4 lg:border-l lg:border-t-0">
+          <Link to={`/diagnostico/${diagnosis.id}`} className="btn-secondary w-full justify-center">
+            <ClipboardList className="h-4 w-4" />
+            Ver recomendación
+          </Link>
+          <Link to={`/diagnostico/${diagnosis.id}/seguimiento`} className="btn-primary w-full justify-center">
+            <RefreshCw className="h-4 w-4" />
+            Dar seguimiento
+          </Link>
         </div>
       </div>
     </section>

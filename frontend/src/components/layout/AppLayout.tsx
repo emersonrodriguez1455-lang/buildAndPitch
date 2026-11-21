@@ -76,9 +76,10 @@ export function AppLayout() {
   }, [refreshLatest]);
 
   const hideBannerOnDetail =
-    latest != null &&
-    (location.pathname === `/diagnostico/${latest.id}` ||
-      location.pathname === `/diagnostico/${latest.id}/seguimiento`);
+    location.pathname === "/dashboard" ||
+    (latest != null &&
+      (location.pathname === `/diagnostico/${latest.id}` ||
+        location.pathname === `/diagnostico/${latest.id}/seguimiento`));
 
   return (
     <div className="flex min-h-screen">
