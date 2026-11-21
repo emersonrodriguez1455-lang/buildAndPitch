@@ -8,6 +8,7 @@ import {
   ScanLine,
   X,
 } from "lucide-react";
+import { AgroAlertaMark } from "../brand/AgroAlertaMark";
 
 const links = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -35,14 +36,19 @@ export function Sidebar({ open, onClose, latestId }: SidebarProps) {
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between px-5 py-5 sm:px-6 sm:py-6">
-          <div>
-            <p className="font-display text-[22px] tracking-tight text-ink">AgroAlerta</p>
-            <p className="mt-1 text-[14px] text-ash">AI para café</p>
+        <div className="flex items-center justify-between gap-3 px-5 py-5 sm:px-6 sm:py-6">
+          <div className="flex min-w-0 items-center gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-elevated bg-mist text-ink">
+              <AgroAlertaMark className="h-6 w-6" />
+            </span>
+            <div className="min-w-0">
+              <p className="font-display text-[22px] tracking-tight text-ink">AgroAlerta</p>
+              <p className="mt-0.5 text-[14px] text-ash">AI para café</p>
+            </div>
           </div>
           <button
             type="button"
-            className="rounded-pill p-2.5 text-ink hover:bg-mist lg:hidden"
+            className="shrink-0 rounded-pill p-2.5 text-ink hover:bg-mist lg:hidden"
             onClick={onClose}
             aria-label="Cerrar menú"
           >

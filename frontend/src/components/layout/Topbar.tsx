@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
-import { ClipboardList } from "lucide-react";
-import { AgroAlertaMark } from "../brand/AgroAlertaMark";
+import { ClipboardList, Menu } from "lucide-react";
 import type { Diagnosis } from "../../types";
 
 interface TopbarProps {
@@ -30,7 +29,7 @@ export function Topbar({ title, modelReady, modelLoading, onMenu, latest }: Topb
             className="rounded-pill border border-border p-2 text-ink lg:hidden"
             aria-label="Abrir menú"
           >
-            <AgroAlertaMark className="h-5 w-5" />
+            <Menu className="h-5 w-5" />
           </button>
           <div>
             <p className="section-label">Sección</p>
