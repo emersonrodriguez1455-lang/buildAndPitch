@@ -49,8 +49,10 @@
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --duration-fast: 120ms;
   --duration-ui: 180ms;
-  --duration-enter: 320ms;
+  --duration-enter: 250ms;
+  --duration-exit: 160ms;
   --duration-page: 420ms;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
 
   color: var(--color-ink-black);
   background: var(--color-paper-white);
@@ -155,6 +157,41 @@ button {
 
   .page-enter {
     animation: fade-in var(--duration-page) var(--ease-out) both;
+  }
+
+  /*
+   * Plan banner: enter 250ms ease-out, collapse so main content rises.
+   * Exit is parent unmount after persist; open=false collapses first frame.
+   */
+  .plan-banner-slot {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transform: translateY(-8px);
+    border-bottom: 1px solid transparent;
+    transition:
+      grid-template-rows var(--duration-exit) var(--ease-in),
+      opacity var(--duration-exit) var(--ease-in),
+      transform var(--duration-exit) var(--ease-in),
+      border-color var(--duration-exit) var(--ease-in);
+  }
+
+  .plan-banner-slot.is-open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transform: translateY(0);
+    border-bottom-color: var(--color-border);
+    transition:
+      grid-template-rows var(--duration-enter) var(--ease-out),
+      opacity var(--duration-enter) var(--ease-out),
+      transform var(--duration-enter) var(--ease-out),
+      border-color var(--duration-enter) var(--ease-out);
+  }
+
+  .plan-banner-panel {
+    overflow: hidden;
+    min-height: 0;
+    background-color: var(--color-fog-white);
   }
 
   /* Quiet nested panels — always light surface + dark readable text */
