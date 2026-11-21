@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useOutletContext } from "react-router-dom";
 import { ImagePlus, Loader2, RefreshCw, Trash2, Upload } from "lucide-react";
+import { ImageSourcePicker } from "../components/common/ImageSourcePicker";
 import { PageHeader } from "../components/common/PageHeader";
 import { CarePlanPanel } from "../components/diagnosis/CarePlanPanel";
 import { ResultCard, type ResultRevealStage } from "../components/diagnosis/ResultCard";
@@ -206,18 +207,8 @@ export function DiagnosisPage() {
             {preview ? (
               <div className="mx-auto max-w-md">
                 <img src={preview} alt="Vista previa" className="mb-4 max-h-72 w-full rounded-image object-cover" />
-                <div className="flex flex-wrap justify-center gap-2">
-                  <label className="btn-secondary cursor-pointer">
-                    <Upload className="h-4 w-4" />
-                    Reemplazar
-                    <input
-                      type="file"
-                      accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
-                      capture="environment"
-                      className="hidden"
-                      onChange={(e) => assignFile(e.target.files?.[0] || null)}
-                    />
-                  </label>
+                <ImageSourcePicker onPick={assignFile} disabled={analyzing} variant="replace" />
+                <div className="mt-2 flex justify-center">
                   <button type="button" className="btn-secondary" onClick={clearImage} disabled={analyzing}>
                     <Trash2 className="h-4 w-4" />
                     Eliminar
@@ -231,16 +222,8 @@ export function DiagnosisPage() {
                 </div>
                 <p className="text-[18px] text-ink">Arrastra una fotografía aquí</p>
                 <p className="mt-1 text-[15px] text-slate">JPG, JPEG, PNG o WEBP · máximo {MAX_MB} MB</p>
-                <label className="btn-primary mt-4 cursor-pointer">
-                  Seleccionar imagen
-                  <input
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
-                    capture="environment"
-                    className="hidden"
-                    onChange={(e) => assignFile(e.target.files?.[0] || null)}
-                  />
-                </label>
+                <p className="mt-1 text-[14px] text-ash sm:hidden">O elige de galería / toma una foto</p>
+                <ImageSourcePicker onPick={assignFile} disabled={analyzing} />
               </div>
             )}
           </div>

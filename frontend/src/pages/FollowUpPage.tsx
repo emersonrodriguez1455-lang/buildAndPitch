@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, ImagePlus, Loader2, Trash2, Upload } from "lucide-react";
 import { CarePlanPanel } from "../components/diagnosis/CarePlanPanel";
+import { ImageSourcePicker } from "../components/common/ImageSourcePicker";
 import { FollowUpSkeleton } from "../components/common/Skeleton";
 import { PageHeader } from "../components/common/PageHeader";
 import { ResultCard, type ResultRevealStage } from "../components/diagnosis/ResultCard";
@@ -149,18 +150,8 @@ export function FollowUpPage() {
             {preview ? (
               <div className="mx-auto max-w-md">
                 <img src={preview} alt="Vista previa" className="mb-4 max-h-72 w-full rounded-image object-cover" />
-                <div className="flex flex-wrap justify-center gap-2">
-                  <label className="btn-secondary cursor-pointer">
-                    <Upload className="h-4 w-4" />
-                    Reemplazar
-                    <input
-                      type="file"
-                      accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
-                      capture="environment"
-                      className="hidden"
-                      onChange={(e) => assignFile(e.target.files?.[0] || null)}
-                    />
-                  </label>
+                <ImageSourcePicker onPick={assignFile} disabled={analyzing} variant="replace" />
+                <div className="mt-2 flex justify-center">
                   <button type="button" className="btn-secondary" onClick={clearImage} disabled={analyzing}>
                     <Trash2 className="h-4 w-4" />
                     Eliminar
@@ -173,16 +164,7 @@ export function FollowUpPage() {
                   <ImagePlus className="h-6 w-6" />
                 </div>
                 <p className="text-[18px] text-ink">Nueva fotografía de seguimiento</p>
-                <label className="btn-primary mt-4 cursor-pointer">
-                  Seleccionar o tomar foto
-                  <input
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
-                    capture="environment"
-                    className="hidden"
-                    onChange={(e) => assignFile(e.target.files?.[0] || null)}
-                  />
-                </label>
+                <ImageSourcePicker onPick={assignFile} disabled={analyzing} />
               </div>
             )}
           </div>
