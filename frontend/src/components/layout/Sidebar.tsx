@@ -74,10 +74,17 @@ export function Sidebar({ open, onClose, latestId }: SidebarProps) {
           ) : null}
         </nav>
 
-        <div className="m-3 rounded-card bg-mist p-4 text-[14px] text-slate sm:m-4 sm:p-5">
-          <p className="text-[15px] text-ink">MVP de demostración</p>
-          <p className="mt-2 leading-relaxed">
-            Entorno de un solo usuario. Los resultados de IA requieren validación técnica.
+        <div className="m-3 border-t border-border px-1 pt-4 sm:m-4">
+          <p className="section-label mb-2">Modelo conectado</p>
+          <div
+            className="inline-flex max-w-full items-center gap-2 rounded-pill border border-border bg-fog px-3 py-1.5"
+            title="ixrbhii/coffee-disease-convnext · Hugging Face"
+          >
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-ink" aria-hidden />
+            <span className="truncate text-[13px] text-ink">ConvNeXt · café</span>
+          </div>
+          <p className="mt-2 text-[12px] leading-relaxed text-ash">
+            Clasificador científico entrenado en enfermedades del café
           </p>
         </div>
       </aside>
