@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: agroalerta-ai
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: AUTO_LOAD_MODEL
+        value: "true"
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: PYTHONUNBUFFERED
+        value: "1"

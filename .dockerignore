@@ -1,0 +1,17 @@
+**/node_modules
+**/venv
+**/.venv
+**/__pycache__
+**/.pytest_cache
+**/dist
+**/uploads
+**/data
+**/.env
+**/.git
+**/tmp-out.css
+**/*.db
+frontend/tmp-out.css
+backend/venv
+backend/.venv
+.cursor
+agent-transcripts
